@@ -15,12 +15,11 @@ export default function AnnouncementBar() {
   const messages = offer.strip.messages;
 
   useEffect(() => {
-    // Respect the real deadline.
+    // A repeating window never closes for good; a hard deadline does, and once
+    // it passes the strip must stop advertising the price.
+    if (offer.recurringWindowHours) return;
     const remaining = msRemaining();
-    if (remaining !== null && remaining <= 0) {
-      setLive(false);
-      return;
-    }
+    if (remaining !== null && remaining <= 0) setLive(false);
   }, []);
 
   useEffect(() => {
@@ -38,18 +37,18 @@ export default function AnnouncementBar() {
   if (!offer.strip.enabled || !live || messages.length === 0) return null;
 
   return (
-    <div className="relative z-50 bg-charcoal text-ivory">
+    <div className="relative z-50 bg-pink text-white">
       <div className="shell flex h-9 items-center justify-center gap-2 overflow-hidden sm:h-10">
-        <DiamondIcon className="h-2 w-2 shrink-0 text-goldsoft" />
+        <DiamondIcon className="h-2 w-2 shrink-0 text-white/70" />
 
         <p
           key={index}
-          className="animate-fade-in truncate text-center text-[10.5px] font-medium uppercase tracking-wide2 text-ivory/90 sm:text-[11px]"
+          className="animate-fade-in truncate text-center text-[10.5px] font-medium uppercase tracking-wide2 text-white sm:text-[11px]"
         >
           {messages[index]}
         </p>
 
-        <DiamondIcon className="h-2 w-2 shrink-0 text-goldsoft" />
+        <DiamondIcon className="h-2 w-2 shrink-0 text-white/70" />
       </div>
     </div>
   );

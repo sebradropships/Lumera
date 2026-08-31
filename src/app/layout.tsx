@@ -1,19 +1,18 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
 import { getProduct, defaultVariantOf } from "@/lib/product-source";
 import "./globals.css";
 
-const serif = Cormorant_Garamond({
+/**
+ * Fallback for Gilroy, which is licensed separately (see globals.css). Outfit is
+ * the closest free geometric sans, so the page keeps its proportions whether or
+ * not the Gilroy files are installed.
+ */
+const sans = Outfit({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
-  variable: "--font-serif",
-  display: "swap",
-});
-
-const sans = Inter({
-  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
   variable: "--font-sans",
   display: "swap",
 });
@@ -56,7 +55,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#FBF8F4",
+  themeColor: "#FFF7F9",
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
@@ -86,7 +85,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   };
 
   return (
-    <html lang="en" className={`${serif.variable} ${sans.variable}`}>
+    <html lang="en" className={sans.variable}>
       <body>
         <CartProvider product={product}>
           {children}

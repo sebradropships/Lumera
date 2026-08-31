@@ -1,3 +1,42 @@
+/**
+ * Gilroy is a commercial typeface (Fontfabric) and is not bundled. Drop the
+ * licensed files into public/fonts/ using these exact names and the whole page
+ * switches to Gilroy; until then every rule falls through to Outfit, loaded via
+ * next/font in layout.tsx.
+ */
+/* UNCOMMENT THIS BLOCK once the Gilroy .woff2 files are in public/fonts/
+
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Gilroy";
+  src: url("/fonts/Gilroy-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+*/
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -21,17 +60,17 @@
   }
 
   body {
-    @apply bg-ivory text-charcoal font-sans antialiased;
+    @apply bg-blush text-ink font-sans antialiased;
     text-rendering: optimizeLegibility;
   }
 
   ::selection {
-    background: #eadfd1;
-    color: #211e1b;
+    background: #f9d6e1;
+    color: #2b1f24;
   }
 
   :focus-visible {
-    outline: 2px solid #b08d57;
+    outline: 2px solid #c2456b;
     outline-offset: 3px;
     border-radius: 4px;
   }
@@ -57,23 +96,24 @@
   }
 
   .eyebrow {
-    @apply text-[10.5px] font-medium uppercase tracking-eyebrow text-gold sm:text-[11px];
+    @apply text-[10.5px] font-medium uppercase tracking-eyebrow text-pink sm:text-[11px];
   }
 
+  /* Geometric sans wants weight and negative tracking where a serif wanted air. */
   .display {
-    @apply font-serif font-light leading-[1.06] tracking-[-0.015em] text-charcoal;
+    @apply font-sans font-semibold leading-[1.08] tracking-[-0.03em] text-ink;
   }
 
   .rule {
-    @apply h-px w-full bg-gradient-to-r from-transparent via-sand to-transparent;
+    @apply h-px w-full bg-gradient-to-r from-transparent via-rosedust to-transparent;
   }
 
-  /* Primary CTA — champagne-to-charcoal, with a slow gold sheen on hover. */
+  /* Primary CTA — babypink-to-ink, with a slow pink sheen on hover. */
   .btn-primary {
     @apply relative inline-flex w-full items-center justify-center gap-2 overflow-hidden
-      rounded-full bg-charcoal px-7 py-[18px] text-[13px] font-medium uppercase
-      tracking-wide2 text-ivory shadow-lift transition-all duration-300 ease-silk
-      hover:bg-[#312C27] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60;
+      rounded-full bg-ink px-7 py-[18px] text-[13px] font-medium uppercase
+      tracking-wide2 text-blush shadow-lift transition-all duration-300 ease-silk
+      hover:bg-[#A8375A] active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60;
   }
 
   .btn-primary::after {
@@ -88,10 +128,10 @@
   }
 
   .btn-secondary {
-    @apply inline-flex w-full items-center justify-center rounded-full border border-sand
+    @apply inline-flex w-full items-center justify-center rounded-full border border-rosedust
       bg-white/70 px-7 py-[16px] text-[12.5px] font-medium uppercase tracking-wide2
-      text-charcoal backdrop-blur transition-all duration-300 ease-silk
-      hover:border-gold hover:bg-white active:scale-[0.985];
+      text-ink backdrop-blur transition-all duration-300 ease-silk
+      hover:border-pink hover:bg-white active:scale-[0.985];
   }
 
   /* Elegant rounded card with a whisper of glass. */
@@ -104,11 +144,11 @@
   }
 
   .price-now {
-    @apply font-serif text-[38px] leading-none text-charcoal sm:text-[44px];
+    @apply font-sans text-[38px] font-semibold leading-none tracking-[-0.03em] text-ink sm:text-[44px];
   }
 
   .price-was {
-    @apply font-serif text-[20px] leading-none text-muted line-through decoration-muted/60;
+    @apply font-sans text-[20px] font-medium leading-none text-muted line-through decoration-muted/60;
   }
 }
 
@@ -130,12 +170,12 @@
     scrollbar-width: none;
   }
 
-  /* Warm ivory field with soft champagne light — the page's base atmosphere. */
+  /* Warm blush field with soft babypink light — the page's base atmosphere. */
   .bg-atmosphere {
     background:
-      radial-gradient(120% 70% at 50% -10%, #fffdfa 0%, rgba(255, 253, 250, 0) 60%),
-      radial-gradient(90% 50% at 100% 20%, rgba(234, 223, 209, 0.55) 0%, rgba(234, 223, 209, 0) 70%),
-      radial-gradient(80% 45% at 0% 65%, rgba(223, 207, 187, 0.35) 0%, rgba(223, 207, 187, 0) 70%),
-      #fbf8f4;
+      radial-gradient(120% 70% at 50% -10%, #fffafc 0%, rgba(255, 250, 252, 0) 60%),
+      radial-gradient(90% 50% at 100% 20%, rgba(249, 214, 225, 0.6) 0%, rgba(249, 214, 225, 0) 70%),
+      radial-gradient(80% 45% at 0% 65%, rgba(240, 168, 190, 0.28) 0%, rgba(240, 168, 190, 0) 70%),
+      #fff7f9;
   }
 }

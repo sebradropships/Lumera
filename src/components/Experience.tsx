@@ -39,7 +39,7 @@ export default function Experience() {
   return (
     <section
       aria-labelledby="experience-heading"
-      className="relative border-y border-sand/50 bg-[linear-gradient(180deg,#FBF8F4_0%,#F6F0E8_45%,#FBF8F4_100%)] py-16 sm:py-20 lg:py-28"
+      className="relative border-y border-rosedust/50 bg-[linear-gradient(180deg,#FFF7F9_0%,#FDECF1_45%,#FFF7F9_100%)] py-16 sm:py-20 lg:py-28"
     >
       <div className="shell">
         <Reveal className="mx-auto max-w-[34rem] text-center">
@@ -50,7 +50,7 @@ export default function Experience() {
           >
             Your Skin, But More Radiant.
           </h2>
-          <p className="mt-4 text-[15px] leading-[1.65] text-graphite sm:text-[16px]">
+          <p className="mt-4 text-[15px] leading-[1.65] text-plum sm:text-[16px]">
             Turn your skincare routine into a 20-minute glow ritual.
           </p>
         </Reveal>
@@ -81,13 +81,13 @@ export default function Experience() {
                   </div>
 
                   <div className="p-5 sm:p-6">
-                    <p className="text-[10px] font-medium uppercase tracking-eyebrow text-gold">
+                    <p className="text-[10px] font-medium uppercase tracking-eyebrow text-pink">
                       {card.number}
                     </p>
-                    <h3 className="mt-2.5 font-serif text-[22px] leading-tight text-charcoal sm:text-[24px]">
+                    <h3 className="mt-2.5 font-serif text-[22px] leading-tight text-ink sm:text-[24px]">
                       {card.title}
                     </h3>
-                    <p className="mt-2 text-[14px] leading-[1.6] text-graphite">{card.copy}</p>
+                    <p className="mt-2 text-[14px] leading-[1.6] text-plum">{card.copy}</p>
                   </div>
                 </article>
               </Reveal>
@@ -118,21 +118,21 @@ export default function Experience() {
               <ol className="mt-5 space-y-5">
                 {steps.map((step) => (
                   <li key={step.number} className="flex gap-4">
-                    <span className="mt-[3px] shrink-0 font-serif text-[15px] tracking-wide2 text-gold">
+                    <span className="mt-[3px] shrink-0 font-serif text-[15px] tracking-wide2 text-pink">
                       {step.number}
                     </span>
                     <div className="min-w-0">
-                      <h3 className="text-[11px] font-semibold uppercase tracking-eyebrow text-charcoal">
+                      <h3 className="text-[11px] font-semibold uppercase tracking-eyebrow text-ink">
                         {step.title}
                       </h3>
-                      <p className="mt-1.5 text-[14px] leading-[1.55] text-graphite">{step.copy}</p>
+                      <p className="mt-1.5 text-[14px] leading-[1.55] text-plum">{step.copy}</p>
                     </div>
                   </li>
                 ))}
               </ol>
 
               <p className="mt-6 flex items-center gap-2 text-[11px] text-muted">
-                <DiamondIcon className="h-2 w-2 text-goldsoft" />
+                <DiamondIcon className="h-2 w-2 text-pinksoft" />
                 A cosmetic skincare ritual — always follow the instructions on pack.
               </p>
             </div>

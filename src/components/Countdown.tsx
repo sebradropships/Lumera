@@ -1,14 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { breakdown, msRemaining, offer, type Remaining } from "@/data/offer";
+import { breakdown, countdownEnabled, msRemaining, offer, type Remaining } from "@/data/offer";
 
 const pad = (n: number) => n.toString().padStart(2, "0");
 
 function Cell({ value, label }: { value: string; label: string }) {
   return (
     <div className="flex flex-col items-center">
-      <span className="min-w-[2.2rem] rounded-lg border border-white/70 bg-white/80 px-2 py-1 lining-nums text-center font-serif text-[17px] leading-none text-charcoal shadow-soft sm:min-w-[2.5rem] sm:text-[20px] sm:py-1.5">
+      <span className="min-w-[2.2rem] rounded-lg border border-white/70 bg-white/80 px-2 py-1 lining-nums text-center font-serif text-[17px] leading-none text-ink shadow-soft sm:min-w-[2.5rem] sm:text-[20px] sm:py-1.5">
         {value}
       </span>
       <span className="mt-1 text-[8.5px] font-medium uppercase tracking-[0.18em] text-muted sm:text-[9px]">
@@ -20,7 +20,7 @@ function Cell({ value, label }: { value: string; label: string }) {
 
 function Colon() {
   return (
-    <span aria-hidden="true" className="pb-3.5 font-serif text-[15px] leading-none text-sand">
+    <span aria-hidden="true" className="pb-3.5 font-serif text-[15px] leading-none text-rosedust">
       :
     </span>
   );
@@ -58,7 +58,7 @@ export default function Countdown({ className = "" }: { className?: string }) {
     return () => window.clearInterval(id);
   }, []);
 
-  if (!offer.endsAt || !mounted) return null;
+  if (!countdownEnabled || !mounted) return null;
 
   if (expired) {
     return (
@@ -70,11 +70,20 @@ export default function Countdown({ className = "" }: { className?: string }) {
 
   if (!remaining) return null;
 
-  const spoken = `${remaining.days} days, ${remaining.hours} hours, ${remaining.minutes} minutes remaining`;
+  // An 8-hour window never shows a day, so the cell would just read "00".
+  const showDays = remaining.days > 0;
+  const spoken = [
+    showDays ? `${remaining.days} days` : null,
+    `${remaining.hours} hours`,
+    `${remaining.minutes} minutes`,
+    `${remaining.seconds} seconds`,
+  ]
+    .filter(Boolean)
+    .join(", ") + " remaining";
 
   return (
     <div className={className}>
-      <p className="text-center text-[9.5px] font-medium uppercase tracking-eyebrow text-gold sm:text-[10px]">
+      <p className="text-center text-[9.5px] font-medium uppercase tracking-eyebrow text-pink sm:text-[10px]">
         {offer.countdownLabel}
       </p>
 
@@ -84,8 +93,12 @@ export default function Countdown({ className = "" }: { className?: string }) {
         aria-live="off"
         aria-label={spoken}
       >
-        <Cell value={pad(remaining.days)} label="Days" />
-        <Colon />
+        {showDays && (
+          <>
+            <Cell value={pad(remaining.days)} label="Days" />
+            <Colon />
+          </>
+        )}
         <Cell value={pad(remaining.hours)} label="Hrs" />
         <Colon />
         <Cell value={pad(remaining.minutes)} label="Min" />

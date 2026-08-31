@@ -1,6 +1,6 @@
 /**
  * Built-in Lumera art panels — used until real product photography is added to
- * `src/data/media.ts`. Deliberately illustrative (soft champagne light, glass,
+ * `src/data/media.ts`. Deliberately illustrative (soft babypink light, glass,
  * gel) rather than a fake photograph of a product that hasn't been shot yet.
  */
 
@@ -9,9 +9,9 @@ type Variant = "jar" | "mask" | "texture" | "ritual";
 const gradients = (id: string) => (
   <defs>
     <linearGradient id={`${id}-field`} x1="0" y1="0" x2="0.6" y2="1">
-      <stop offset="0%" stopColor="#FFFDFA" />
-      <stop offset="52%" stopColor="#F4EADD" />
-      <stop offset="100%" stopColor="#E4D3BE" />
+      <stop offset="0%" stopColor="#FFFAFC" />
+      <stop offset="52%" stopColor="#FBDCE7" />
+      <stop offset="100%" stopColor="#EDA8C0" />
     </linearGradient>
     <radialGradient id={`${id}-bloom`} cx="0.36" cy="0.26" r="0.62">
       <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.95" />
@@ -19,17 +19,17 @@ const gradients = (id: string) => (
     </radialGradient>
     <linearGradient id={`${id}-glass`} x1="0.1" y1="0" x2="0.9" y2="1">
       <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.94" />
-      <stop offset="46%" stopColor="#F7EFE4" stopOpacity="0.86" />
-      <stop offset="100%" stopColor="#DCC7AC" stopOpacity="0.92" />
+      <stop offset="46%" stopColor="#FDF0F4" stopOpacity="0.86" />
+      <stop offset="100%" stopColor="#F0BFCF" stopOpacity="0.92" />
     </linearGradient>
     <linearGradient id={`${id}-gel`} x1="0.2" y1="0" x2="0.8" y2="1">
       <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.85" />
-      <stop offset="100%" stopColor="#EBDCC7" stopOpacity="0.7" />
+      <stop offset="100%" stopColor="#FADCE6" stopOpacity="0.7" />
     </linearGradient>
-    <linearGradient id={`${id}-gold`} x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stopColor="#C9A66B" />
-      <stop offset="45%" stopColor="#EBD6AE" />
-      <stop offset="100%" stopColor="#B08D57" />
+    <linearGradient id={`${id}-pink`} x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stopColor="#D9628A" />
+      <stop offset="45%" stopColor="#F5AFC4" />
+      <stop offset="100%" stopColor="#C2456B" />
     </linearGradient>
     <filter id={`${id}-blur`} x="-30%" y="-30%" width="160%" height="160%">
       <feGaussianBlur stdDeviation="14" />
@@ -44,7 +44,7 @@ function Jar({ id }: { id: string }) {
   return (
     <g>
       {/* cast shadow */}
-      <ellipse cx="200" cy="392" rx="104" ry="20" fill="#C6AE8E" opacity="0.5" filter={`url(#${id}-blur)`} />
+      <ellipse cx="200" cy="392" rx="104" ry="20" fill="#C98BA4" opacity="0.5" filter={`url(#${id}-blur)`} />
       {/* body */}
       <path
         d="M116 214h168v128c0 24-19 42-43 42H159c-24 0-43-18-43-42V214Z"
@@ -54,7 +54,7 @@ function Jar({ id }: { id: string }) {
         d="M116 214h168v128c0 24-19 42-43 42H159c-24 0-43-18-43-42V214Z"
         fill="none"
         stroke="#FFFFFF"
-        strokeOpacity="0.85"
+        strokeOpacity="0.95"
         strokeWidth="1.5"
       />
       {/* gel level inside */}
@@ -76,18 +76,18 @@ function Jar({ id }: { id: string }) {
         strokeOpacity="0.9"
         strokeWidth="1.5"
       />
-      {/* gold band */}
-      <rect x="104" y="205" width="192" height="4" rx="2" fill={`url(#${id}-gold)`} opacity="0.85" />
+      {/* pink band */}
+      <rect x="104" y="205" width="192" height="4" rx="2" fill={`url(#${id}-pink)`} opacity="0.85" />
       {/* highlight */}
       <rect x="132" y="176" width="26" height="188" rx="13" fill="#FFFFFF" opacity="0.42" filter={`url(#${id}-soft)`} />
       <text
         x="200"
         y="316"
         textAnchor="middle"
-        fontFamily="Georgia, 'Times New Roman', serif"
-        fontSize="17"
-        letterSpacing="9"
-        fill="#8C7350"
+        fontFamily="Gilroy, Outfit, system-ui, sans-serif"
+        fontSize="15"
+        letterSpacing="7"
+        fill="#B0587A"
         opacity="0.72"
       >
         LUMERA
@@ -99,7 +99,7 @@ function Jar({ id }: { id: string }) {
 function Mask({ id }: { id: string }) {
   return (
     <g>
-      <ellipse cx="200" cy="404" rx="96" ry="16" fill="#C6AE8E" opacity="0.4" filter={`url(#${id}-blur)`} />
+      <ellipse cx="200" cy="404" rx="96" ry="16" fill="#C98BA4" opacity="0.4" filter={`url(#${id}-blur)`} />
       {/* collagen sheet */}
       <path
         d="M200 108c56 0 92 40 92 104 0 78-46 152-92 172-46-20-92-94-92-172 0-64 36-104 92-104Z"
@@ -115,12 +115,12 @@ function Mask({ id }: { id: string }) {
         opacity="0.42"
       />
       {/* eye openings */}
-      <ellipse cx="164" cy="212" rx="21" ry="11" fill="#E7D8C4" opacity="0.9" />
-      <ellipse cx="236" cy="212" rx="21" ry="11" fill="#E7D8C4" opacity="0.9" />
+      <ellipse cx="164" cy="212" rx="21" ry="11" fill="#F3D3DF" opacity="0.9" />
+      <ellipse cx="236" cy="212" rx="21" ry="11" fill="#F3D3DF" opacity="0.9" />
       {/* mouth opening */}
-      <path d="M176 298c14-9 34-9 48 0-14 12-34 12-48 0Z" fill="#E7D8C4" opacity="0.9" />
-      {/* gold accent droplet */}
-      <circle cx="262" cy="150" r="7" fill={`url(#${id}-gold)`} opacity="0.5" />
+      <path d="M176 298c14-9 34-9 48 0-14 12-34 12-48 0Z" fill="#F3D3DF" opacity="0.9" />
+      {/* pink accent droplet */}
+      <circle cx="262" cy="150" r="7" fill={`url(#${id}-pink)`} opacity="0.5" />
     </g>
   );
 }
@@ -153,10 +153,10 @@ function Ritual({ id }: { id: string }) {
   return (
     <g>
       {/* soft face, three-quarter — the mask resting on clean skin */}
-      <ellipse cx="200" cy="418" rx="120" ry="22" fill="#C6AE8E" opacity="0.32" filter={`url(#${id}-blur)`} />
+      <ellipse cx="200" cy="418" rx="120" ry="22" fill="#C98BA4" opacity="0.32" filter={`url(#${id}-blur)`} />
       <path
         d="M200 96c62 0 100 44 100 116 0 92-46 168-100 188-54-20-100-96-100-188 0-72 38-116 100-116Z"
-        fill="#EFE1CE"
+        fill="#FBE2EA"
       />
       {/* the gel sheet laid over the face */}
       <path
@@ -171,15 +171,15 @@ function Ritual({ id }: { id: string }) {
         fill="#FFFFFF"
         opacity="0.4"
       />
-      <ellipse cx="170" cy="216" rx="19" ry="10" fill="#E2D0B9" opacity="0.9" />
-      <ellipse cx="230" cy="216" rx="19" ry="10" fill="#E2D0B9" opacity="0.9" />
-      <path d="M180 300c12-8 28-8 40 0-12 10-28 10-40 0Z" fill="#E2D0B9" opacity="0.9" />
+      <ellipse cx="170" cy="216" rx="19" ry="10" fill="#F2CEDC" opacity="0.9" />
+      <ellipse cx="230" cy="216" rx="19" ry="10" fill="#F2CEDC" opacity="0.9" />
+      <path d="M180 300c12-8 28-8 40 0-12 10-28 10-40 0Z" fill="#F2CEDC" opacity="0.9" />
       {/* 20-minute ritual marker */}
       <circle cx="288" cy="150" r="26" fill="#FFFFFF" opacity="0.7" />
-      <circle cx="288" cy="150" r="26" fill="none" stroke={`url(#${id}-gold)`} strokeWidth="1.4" />
+      <circle cx="288" cy="150" r="26" fill="none" stroke={`url(#${id}-pink)`} strokeWidth="1.4" />
       <path
         d="M288 134v16l11 7"
-        stroke="#B08D57"
+        stroke="#C2456B"
         strokeWidth="1.8"
         strokeLinecap="round"
         strokeLinejoin="round"

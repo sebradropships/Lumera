@@ -62,18 +62,18 @@ export default function StickyBar() {
         shown ? "translate-y-0 opacity-100" : "pointer-events-none translate-y-full opacity-0"
       }`}
     >
-      <div className="border-t border-sand/60 bg-ivory/90 px-4 pt-3 shadow-[0_-8px_30px_-18px_rgba(33,30,27,0.45)] backdrop-blur-xl pb-safe">
+      <div className="border-t border-rosedust/60 bg-blush/90 px-4 pt-3 shadow-[0_-8px_30px_-18px_rgba(43,31,36,0.45)] backdrop-blur-xl pb-safe">
         <div className="mx-auto flex max-w-[560px] items-center gap-3">
           <div className="min-w-0 flex-1">
-            <p className="truncate text-[12.5px] font-medium leading-tight text-charcoal">
+            <p className="truncate text-[12.5px] font-medium leading-tight text-ink">
               {product.shortTitle}
             </p>
             <p className="mt-0.5 flex items-center gap-1.5 text-[11.5px] leading-tight text-muted">
-              <span className="font-medium text-charcoal">{formatPrice(defaultVariant.price)}</span>
+              <span className="font-medium text-ink">{formatPrice(defaultVariant.price)}</span>
               {savings && (
                 <>
                   <span aria-hidden="true">·</span>
-                  <span className="font-medium uppercase tracking-wide text-gold">
+                  <span className="font-medium uppercase tracking-wide text-pink">
                     Save {savings}%
                   </span>
                 </>
@@ -88,7 +88,7 @@ export default function StickyBar() {
               addToCart(defaultVariant.id, 1);
               openCart();
             }}
-            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-charcoal px-5 py-3.5 text-[12px] font-medium uppercase tracking-wide2 text-ivory shadow-lift transition-transform duration-200 active:scale-[0.97]"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-ink px-5 py-3.5 text-[12px] font-medium uppercase tracking-wide2 text-blush shadow-lift transition-transform duration-200 active:scale-[0.97]"
           >
             Get yours
             <ArrowIcon className="h-3.5 w-3.5" />

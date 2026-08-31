@@ -16,7 +16,7 @@ export default function QuantityStepper({
 
   return (
     <div
-      className={`inline-flex items-center rounded-full border border-sand bg-white/80 ${box}`}
+      className={`inline-flex items-center rounded-full border border-rosedust bg-white/80 ${box}`}
       role="group"
       aria-label={label}
     >
@@ -25,7 +25,7 @@ export default function QuantityStepper({
         onClick={() => onChange(Math.max(1, value - 1))}
         disabled={value <= 1}
         aria-label="Decrease quantity"
-        className={`${size} flex items-center justify-center rounded-full text-charcoal transition-colors duration-200 hover:bg-champagne/60 disabled:opacity-35 disabled:hover:bg-transparent`}
+        className={`${size} flex items-center justify-center rounded-full text-ink transition-colors duration-200 hover:bg-babypink/60 disabled:opacity-35 disabled:hover:bg-transparent`}
       >
         <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
           <path d="M3 8h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
@@ -33,7 +33,7 @@ export default function QuantityStepper({
       </button>
 
       <span
-        className={`min-w-8 text-center font-sans text-[15px] tabular-nums text-charcoal`}
+        className={`min-w-8 text-center font-sans text-[15px] tabular-nums text-ink`}
         aria-live="polite"
         aria-atomic="true"
       >
@@ -45,7 +45,7 @@ export default function QuantityStepper({
         onClick={() => onChange(Math.min(99, value + 1))}
         disabled={value >= 99}
         aria-label="Increase quantity"
-        className={`${size} flex items-center justify-center rounded-full text-charcoal transition-colors duration-200 hover:bg-champagne/60 disabled:opacity-35 disabled:hover:bg-transparent`}
+        className={`${size} flex items-center justify-center rounded-full text-ink transition-colors duration-200 hover:bg-babypink/60 disabled:opacity-35 disabled:hover:bg-transparent`}
       >
         <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" aria-hidden="true">
           <path d="M8 3v10M3 8h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />

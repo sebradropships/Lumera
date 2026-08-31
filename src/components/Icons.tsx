@@ -73,7 +73,7 @@ export function StarIcon({ className = "h-3.5 w-3.5" }: IconProps) {
 export function Stars({ count = 5, className = "" }: { count?: number; className?: string }) {
   return (
     <span
-      className={`inline-flex items-center gap-[3px] text-gold ${className}`}
+      className={`inline-flex items-center gap-[3px] text-pink ${className}`}
       role="img"
       aria-label={`${count} out of 5 stars`}
     >

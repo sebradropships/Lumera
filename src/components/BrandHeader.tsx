@@ -19,7 +19,7 @@ export default function BrandHeader() {
     <header
       className={`sticky top-0 z-40 transition-all duration-500 ease-silk ${
         condensed
-          ? "border-b border-sand/50 bg-ivory/95 backdrop-blur-xl"
+          ? "border-b border-rosedust/50 bg-blush/95 backdrop-blur-xl"
           : "border-b border-transparent bg-transparent"
       }`}
     >
@@ -28,7 +28,7 @@ export default function BrandHeader() {
 
         <a
           href="#top"
-          className="flex h-10 items-center font-serif text-[15px] font-medium uppercase tracking-brand text-charcoal sm:text-[17px]"
+          className="flex h-10 items-center font-serif text-[15px] font-medium uppercase tracking-brand text-ink sm:text-[17px]"
           aria-label="Lumera — back to top"
         >
           <span className="pl-[0.42em]">LUMERA</span>
@@ -37,12 +37,12 @@ export default function BrandHeader() {
         <button
           type="button"
           onClick={openCart}
-          className="relative flex h-9 w-9 items-center justify-center rounded-full text-charcoal transition-colors duration-300 hover:bg-champagne/60"
+          className="relative flex h-9 w-9 items-center justify-center rounded-full text-ink transition-colors duration-300 hover:bg-babypink/60"
           aria-label={itemCount > 0 ? `Open cart, ${itemCount} item${itemCount === 1 ? "" : "s"}` : "Open cart"}
         >
           <BagIcon />
           {itemCount > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[9.5px] font-semibold leading-none text-white">
+            <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-pink px-1 text-[9.5px] font-semibold leading-none text-white">
               {itemCount}
             </span>
           )}

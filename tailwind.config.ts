@@ -5,19 +5,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ivory: "#FBF8F4",
-        linen: "#F4EEE6",
-        champagne: "#EADFD1",
-        sand: "#DFCFBB",
-        charcoal: "#211E1B",
-        graphite: "#4A443E",
-        muted: "#8A8079",
-        gold: "#B08D57",
-        goldsoft: "#D8BE93",
+        blush: "#FFF7F9", // page ground
+        petal: "#FDEFF3", // soft section fill
+        babypink: "#F9D6E1", // accent fill
+        rosedust: "#EFC3D0", // hairlines and borders
+        ink: "#2B1F24", // headings
+        plum: "#574450", // body copy
+        muted: "#7E6A72", // secondary copy (5:1 on blush)
+        pink: "#C2456B", // primary accent + CTA (5.3:1 with white)
+        pinksoft: "#F0A8BE", // decorative accent
       },
       fontFamily: {
-        serif: ["var(--font-serif)", "Georgia", "Times New Roman", "serif"],
-        sans: ["var(--font-sans)", "system-ui", "-apple-system", "Segoe UI", "sans-serif"],
+        // Gilroy when the licensed files are present in public/fonts/,
+        // otherwise Outfit — the closest free geometric sans.
+        sans: ["Gilroy", "var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["Gilroy", "var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
       },
       letterSpacing: {
         brand: "0.42em",
@@ -29,8 +31,8 @@ const config: Config = {
         xl3: "2.25rem",
       },
       boxShadow: {
-        soft: "0 1px 2px rgba(33,30,27,0.04), 0 12px 40px -18px rgba(33,30,27,0.22)",
-        lift: "0 2px 4px rgba(33,30,27,0.05), 0 24px 60px -24px rgba(33,30,27,0.30)",
+        soft: "0 1px 2px rgba(43,31,36,0.05), 0 12px 40px -18px rgba(43,31,36,0.20)",
+        lift: "0 2px 4px rgba(43,31,36,0.06), 0 24px 60px -24px rgba(43,31,36,0.26)",
         inset: "inset 0 1px 0 rgba(255,255,255,0.7)",
       },
       transitionTimingFunction: {

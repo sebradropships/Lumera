@@ -75,8 +75,8 @@ export const product = {
   ],
 
   offer: {
-    label: "LIMITED LAUNCH OFFER",
-    urgency: "Limited launch pricing",
+    label: "LIMITED OFFER",
+    urgency: "Limited offer · ends soon",
     ctaPrimary: "GET MY LUMERA MASK",
     ctaFinal: "GET LUMERA NOW",
     microcopy: "Secure checkout · Fast US delivery",

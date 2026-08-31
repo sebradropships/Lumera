@@ -1,15 +1,25 @@
 /**
- * ── LAUNCH OFFER ─────────────────────────────────────────────────────────────
+ * ── LIMITED OFFER ────────────────────────────────────────────────────────────
  *
  * The sale strip and the "offer ends in" countdown both read from here.
  *
- * HONESTY RULE: `endsAt` is a single real deadline shared by every visitor. It
- * does NOT reset per session and it is not restarted on reload. When it passes,
- * the countdown and the strip hide themselves rather than showing a fake timer.
- * If you extend the sale, move this date — don't rig it to always show "2 hours
- * left".
+ * Two ways to run the countdown:
  *
- * Set to `null` to remove the countdown entirely and keep the plain sale strip.
+ *   1. `recurringWindowHours` — a repeating window. The clock is anchored to a
+ *      fixed UTC epoch, so the SAME countdown is shown to every visitor at any
+ *      given moment and it rolls over on shared wall-clock boundaries (with an
+ *      8-hour window: 00:00, 08:00 and 16:00 UTC). It is NOT restarted per
+ *      person, per session, or on page load.
+ *
+ *   2. `endsAt` — a single hard deadline. Used only when
+ *      `recurringWindowHours` is null. Once it passes the countdown says the
+ *      offer ended instead of looping.
+ *
+ * A word of warning on option 1: a countdown implies a deadline. If the price
+ * never actually changes when the clock hits zero, the urgency is fictional —
+ * the FTC and the EU Omnibus Directive both treat that as a deceptive practice,
+ * and it is the single most common thing that makes a store look like a
+ * dropshipper. If you run the recurring window, genuinely cycle the offer.
  */
 
 export const offer = {
@@ -22,7 +32,7 @@ export const offer = {
      * store policy backs up.
      */
     messages: [
-      "Limited launch offer — 40% off",
+      "Limited offer — 40% off",
       "Fast US delivery",
       "Secure checkout",
     ] as string[],
@@ -31,16 +41,28 @@ export const offer = {
   },
 
   /**
-   * Real end of the launch price, as an ISO 8601 instant (UTC).
-   * Update this when the sale genuinely changes.
+   * Repeating offer window in hours. Set to null to use `endsAt` instead.
    */
-  endsAt: "2026-09-30T23:59:59Z" as string | null,
+  recurringWindowHours: 8 as number | null,
+
+  /**
+   * Fixed UTC instant the repeating window is measured from. Every visitor
+   * shares this anchor, which is what keeps the countdown identical for all of
+   * them. Changing it shifts when the window rolls over.
+   */
+  windowAnchor: "2026-01-01T00:00:00Z",
+
+  /**
+   * Single hard deadline (ISO 8601, UTC). Only used when
+   * `recurringWindowHours` is null.
+   */
+  endsAt: null as string | null,
 
   /** Shown above the countdown. */
   countdownLabel: "Offer ends in",
 
   /** Shown in place of the countdown once `endsAt` has passed. */
-  expiredLabel: "Launch pricing has ended",
+  expiredLabel: "This offer has ended",
 } as const;
 
 export type Remaining = {
@@ -51,8 +73,28 @@ export type Remaining = {
   total: number;
 };
 
-/** Milliseconds left until `endsAt`, or null when no deadline is configured. */
+/** True when a countdown of either kind is configured. */
+export const countdownEnabled = Boolean(offer.recurringWindowHours || offer.endsAt);
+
+/**
+ * Milliseconds until the offer window closes, or null when no countdown is
+ * configured.
+ *
+ * For the repeating window this is the time to the next shared boundary, so two
+ * people loading the page at the same instant see the same number.
+ */
 export function msRemaining(now: number = Date.now()): number | null {
+  const hours = offer.recurringWindowHours;
+
+  if (hours && hours > 0) {
+    const windowMs = hours * 3_600_000;
+    const anchor = Date.parse(offer.windowAnchor);
+    if (Number.isNaN(anchor)) return null;
+    // Positive modulo, so dates before the anchor behave too.
+    const intoWindow = (((now - anchor) % windowMs) + windowMs) % windowMs;
+    return windowMs - intoWindow;
+  }
+
   if (!offer.endsAt) return null;
   const end = Date.parse(offer.endsAt);
   if (Number.isNaN(end)) return null;

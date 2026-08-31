@@ -50,7 +50,7 @@ export default function ProductGallery() {
 
   return (
     <div className="relative">
-      {/* Soft champagne halo behind the product */}
+      {/* Soft babypink halo behind the product */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -inset-x-6 -top-8 bottom-8 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgba(234,223,209,0.85),rgba(234,223,209,0))] blur-xl"
@@ -66,7 +66,7 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-linen sm:aspect-[4/5] sm:max-h-none"
+            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal sm:aspect-[4/5] sm:max-h-none"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >
@@ -105,7 +105,7 @@ export default function ProductGallery() {
               <span
                 aria-hidden="true"
                 className={`h-1.5 rounded-full transition-all duration-500 ease-silk ${
-                  active === i ? "w-7 bg-gold" : "w-1.5 bg-sand"
+                  active === i ? "w-7 bg-pink" : "w-1.5 bg-rosedust"
                 }`}
               />
             </button>
