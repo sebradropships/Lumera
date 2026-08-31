@@ -191,7 +191,7 @@ export default function CartDrawer() {
           <div className="border-t border-rosedust/60 bg-white/60 px-5 pt-4 backdrop-blur-sm pb-safe">
             {savedAmount > 0 && (
               <div className="mb-2.5 flex items-center justify-between text-[12px]">
-                <span className="text-muted">Launch offer savings</span>
+                <span className="text-muted">Limited offer savings</span>
                 <span className="font-medium text-pink">−{formatPrice(savedAmount)}</span>
               </div>
             )}

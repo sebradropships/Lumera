@@ -49,10 +49,9 @@ export const product = {
    * purchasable even if the Shopify call fails. Shopify overrides these when
    * it answers.
    *
-   * There is deliberately no compareAtPrice: the store has no compare-at price
-   * set, so there is no discount, and every "save X%" badge stays hidden rather
-   * than inventing one. Set a compare-at price in Shopify and the savings
-   * appear on their own.
+   * These mirror the store: $39.00 against a $65.00 compare-at price, which is
+   * exactly 40% off. Change the price in Shopify, not here — this is only the
+   * fallback for when the Admin API cannot be reached.
    *
    * Add more entries (3-pack, 5-pack) and the selector appears automatically —
    * but only if those variants genuinely exist in the store, or checkout will
@@ -63,7 +62,8 @@ export const product = {
       id: "47728384606379",
       title: "Bio-Collagen Gel Mask",
       note: "One glow ritual",
-      price: 2999,
+      price: 3900,
+      compareAtPrice: 6500,
       shopifyVariantId: "47728384606379",
       shopifyVariantGid: "gid://shopify/ProductVariant/47728384606379",
       default: true,
