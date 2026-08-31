@@ -2,16 +2,15 @@
  * Single source of truth for the Lumera product, pricing and offer copy.
  *
  * ── Connecting the live Shopify store ────────────────────────────────────────
- * Set these in `.env.local` (see `.env.example`) and the values below are used
- * only as the build-time fallback:
+ * Set these two in `.env.local` (see `.env.example`) and everything below
+ * becomes a fallback — the live store supplies the title, prices, variants and
+ * photography instead:
  *
- *   NEXT_PUBLIC_SHOPIFY_DOMAIN        your-store.myshopify.com
- *   NEXT_PUBLIC_SHOPIFY_VARIANT_ID    numeric variant id (cart permalink checkout)
- *   SHOPIFY_STOREFRONT_TOKEN          Storefront API token (Cart API checkout)
+ *   SHOPIFY_STORE_DOMAIN   your-store.myshopify.com
+ *   SHOPIFY_ADMIN_TOKEN    Admin API access token (server-only secret)
  *
- * Prices here are placeholders until the store is connected — update
- * `price` / `compareAtPrice` to the real launch numbers, or let the Storefront
- * API supply them.
+ * The prices here are placeholders until then. Update `price` /
+ * `compareAtPrice` — in cents — if you want to run without the store.
  */
 
 export type ProductVariant = {
