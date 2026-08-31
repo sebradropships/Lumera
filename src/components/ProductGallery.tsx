@@ -3,10 +3,15 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductArt from "@/components/ProductArt";
+import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import type { ProductImage } from "@/data/media";
 import { useCart } from "@/lib/cart";
 
-type Slide = { key: string; art?: "jar" | "mask" | "texture"; image?: ProductImage };
+type Slide = {
+  key: string;
+  art?: "jar" | "mask" | "texture";
+  image?: ProductImage;
+};
 
 const fallbackSlides: Slide[] = [
   { key: "jar", art: "jar" },
@@ -85,15 +90,12 @@ export default function ProductGallery() {
                 priority={i === 0}
                 fetchPriority={i === 0 ? "high" : undefined}
                 loading={i === 0 ? "eager" : "lazy"}
-                className="object-cover"
+                className={photoClassName("object-cover")}
               />
             ) : (
               <ProductArt variant={slide.art} className="h-full w-full" />
             )}
-            <div
-              aria-hidden="true"
-              className="pointer-events-none absolute inset-0 rounded-xl3 ring-1 ring-inset ring-white/60"
-            />
+            {slide.image && <PhotoFrame />}
           </div>
         ))}
       </div>

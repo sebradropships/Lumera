@@ -20,6 +20,20 @@
  * 1:1 image is shown uncropped. Anything else is cover-cropped to fit.
  */
 
+/**
+ * How product photography is settled into the pink page. See PhotoFrame.tsx.
+ *
+ *   "frame"    pink vignette + a breath of blush over the photo. Safe for any
+ *              image, including shots on grey or with their own background.
+ *   "multiply" white backgrounds vanish into the page entirely. Strongest
+ *              result, but only when the backdrop is genuinely white — grey
+ *              turns muddy and dark products lose contrast.
+ *   "none"     as shot, hairline only.
+ *
+ * If the store's shots are on pure white, "multiply" is worth trying first.
+ */
+export const photoBlend: "frame" | "multiply" | "none" = "frame";
+
 export type ProductImage = {
   src: string;
   /** Describe what is actually in the frame — this is the accessible label. */

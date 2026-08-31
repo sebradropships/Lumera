@@ -1,5 +1,6 @@
 import Image from "next/image";
 import ProductArt from "@/components/ProductArt";
+import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import Reveal from "@/components/Reveal";
 import { DiamondIcon } from "@/components/Icons";
 import { benefitImages, ritualImage, type ProductImage } from "@/data/media";
@@ -28,7 +29,11 @@ const cards = [
 
 const steps = [
   { number: "01", title: "Apply", copy: "Place the mask onto clean skin." },
-  { number: "02", title: "Relax", copy: "Leave on according to the product instructions." },
+  {
+    number: "02",
+    title: "Relax",
+    copy: "Leave on according to the product instructions.",
+  },
   {
     number: "03",
     title: "Glow",
@@ -55,8 +60,7 @@ function pickPhoto(
 
 export default function Experience({ product }: { product: ResolvedProduct }) {
   const photos = product.images;
-  const ritual =
-    ritualImage ?? (photos.length > 0 ? photos[photos.length > 4 ? 4 : 0] : null);
+  const ritual = ritualImage ?? (photos.length > 0 ? photos[photos.length > 4 ? 4 : 0] : null);
 
   return (
     <section
@@ -86,15 +90,20 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
                 <article className="group h-full overflow-hidden rounded-xl2 border border-white/70 bg-white/65 shadow-soft backdrop-blur-[2px] transition-all duration-500 ease-silk hover:-translate-y-1 hover:shadow-lift">
                   <div className="relative aspect-[4/3] overflow-hidden">
                     {image ? (
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        fill
-                        sizes="(min-width: 1024px) 380px, (min-width: 640px) 33vw, 100vw"
-                        quality={92}
-                        loading="lazy"
-                        className="object-cover transition-transform duration-700 ease-silk group-hover:scale-[1.04]"
-                      />
+                      <>
+                        <Image
+                          src={image.src}
+                          alt={image.alt}
+                          fill
+                          sizes="(min-width: 1024px) 380px, (min-width: 640px) 33vw, 100vw"
+                          quality={92}
+                          loading="lazy"
+                          className={photoClassName(
+                            "object-cover transition-transform duration-700 ease-silk group-hover:scale-[1.04]",
+                          )}
+                        />
+                        <PhotoFrame subtle />
+                      </>
                     ) : (
                       <ProductArt
                         variant={card.art}
@@ -123,15 +132,18 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
           <div className="overflow-hidden rounded-xl3 border border-white/70 bg-white/70 shadow-soft backdrop-blur-sm md:grid md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-stretch">
             <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[280px]">
               {ritual ? (
-                <Image
-                  src={ritual.src}
-                  alt={ritual.alt}
-                  fill
-                  sizes="(min-width: 1024px) 480px, (min-width: 768px) 40vw, 100vw"
-                  quality={92}
-                  loading="lazy"
-                  className="object-cover"
-                />
+                <>
+                  <Image
+                    src={ritual.src}
+                    alt={ritual.alt}
+                    fill
+                    sizes="(min-width: 1024px) 480px, (min-width: 768px) 40vw, 100vw"
+                    quality={92}
+                    loading="lazy"
+                    className={photoClassName("object-cover")}
+                  />
+                  <PhotoFrame subtle />
+                </>
               ) : (
                 <ProductArt variant="ritual" className="h-full w-full" />
               )}
@@ -156,8 +168,8 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
               </ol>
 
               <p className="mt-6 flex items-center gap-2 text-[11px] text-muted">
-                <DiamondIcon className="h-2 w-2 text-pinksoft" />
-                A cosmetic skincare ritual — always follow the instructions on pack.
+                <DiamondIcon className="h-2 w-2 text-pinksoft" />A cosmetic skincare ritual — always
+                follow the instructions on pack.
               </p>
             </div>
           </div>

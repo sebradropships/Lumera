@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import ProductArt from "@/components/ProductArt";
+import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import Image from "next/image";
 import QuantityStepper from "@/components/QuantityStepper";
 import { ArrowIcon, CloseIcon, ShieldIcon } from "@/components/Icons";
@@ -112,7 +113,11 @@ export default function CartDrawer() {
               <p className="mt-2 max-w-[26ch] text-[13px] leading-relaxed text-muted">
                 Your glow ritual is one tap away.
               </p>
-              <button type="button" onClick={closeCart} className="btn-secondary mt-6 max-w-[15rem]">
+              <button
+                type="button"
+                onClick={closeCart}
+                className="btn-secondary mt-6 max-w-[15rem]"
+              >
                 Continue shopping
               </button>
             </div>
@@ -133,11 +138,12 @@ export default function CartDrawer() {
                           fill
                           sizes="70px"
                           quality={92}
-                          className="object-cover"
+                          className={photoClassName("object-cover")}
                         />
                       ) : (
                         <ProductArt variant="jar" className="h-full w-full" />
                       )}
+                      {thumb && <PhotoFrame subtle />}
                     </div>
 
                     <div className="flex min-w-0 flex-1 flex-col">
