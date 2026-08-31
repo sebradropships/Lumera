@@ -161,24 +161,27 @@ export function CartProvider({
       };
     });
 
-    // 1. Storefront API cart.
-    try {
-      const res = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ lines: payload }),
-      });
-      if (res.ok) {
-        const data = (await res.json()) as { checkoutUrl?: string };
-        if (data.checkoutUrl) return data.checkoutUrl;
+    // 1. Storefront API cart. Skipped entirely without a Storefront token —
+    // calling it anyway just adds latency to every checkout for a known no.
+    if (product.storefrontConfigured) {
+      try {
+        const res = await fetch("/api/checkout", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ lines: payload }),
+        });
+        if (res.ok) {
+          const data = (await res.json()) as { checkoutUrl?: string };
+          if (data.checkoutUrl) return data.checkoutUrl;
+        }
+      } catch {
+        /* fall through to the permalink */
       }
-    } catch {
-      /* fall through to the permalink */
     }
 
     // 2. Cart permalink.
     return cartPermalink(payload, product.shopifyDomain);
-  }, [variantById, product.shopifyDomain]);
+  }, [variantById, product.shopifyDomain, product.storefrontConfigured]);
 
   const startCheckout = useCallback(
     async (target: CartLine[]) => {

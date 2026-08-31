@@ -2,6 +2,7 @@ import { cache } from "react";
 import { gallery as localGallery, type ProductImage } from "@/data/media";
 import { product as localProduct, type ProductVariant } from "@/data/product";
 import { fetchLiveProduct } from "@/lib/shopify-admin";
+import { storefrontConfigured } from "@/lib/shopify";
 
 /**
  * The product as the page should render it: live Shopify data when the store is
@@ -32,6 +33,8 @@ export type ResolvedProduct = {
   isLive: boolean;
   /** Store domain, resolved server-side so checkout needs no build-time var. */
   shopifyDomain: string;
+  /** True when a Storefront token makes /api/checkout worth calling. */
+  storefrontConfigured: boolean;
 };
 
 export const getProduct = cache(async (): Promise<ResolvedProduct> => {
@@ -40,6 +43,7 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
 
   const base = {
     shopifyDomain,
+    storefrontConfigured,
     title: localProduct.title,
     shortTitle: localProduct.shortTitle,
     eyebrow: localProduct.eyebrow,

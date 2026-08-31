@@ -18,6 +18,14 @@
 export type CheckoutLine = { variantId?: string; variantGid?: string; quantity: number };
 
 /**
+ * Whether the Storefront API path is usable. Resolved on the server so the
+ * client can skip a round-trip to /api/checkout it already knows will decline.
+ */
+export const storefrontConfigured = Boolean(
+  process.env.SHOPIFY_STOREFRONT_TOKEN?.trim() && process.env.SHOPIFY_STORE_DOMAIN?.trim(),
+);
+
+/**
  * Cart-permalink checkout URL, or null when the store or variant ids are
  * missing.
  *

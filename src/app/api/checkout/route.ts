@@ -6,8 +6,11 @@ export const dynamic = "force-dynamic";
 
 /**
  * Turns the local cart into a Shopify checkout URL.
- * Returns 501 when the Storefront API is not configured — the client then
- * falls back to a cart permalink.
+ *
+ * An unconfigured Storefront API answers 200 with `configured: false`, not a
+ * 5xx: the client handles it by falling back to a cart permalink, so it is a
+ * normal state rather than a server fault, and returning 501 made every
+ * checkout attempt count as an error in production monitoring.
  */
 export async function POST(request: Request) {
   let lines: CheckoutLine[] = [];
@@ -25,10 +28,12 @@ export async function POST(request: Request) {
   try {
     const checkoutUrl = await createStorefrontCheckout(lines);
     if (!checkoutUrl) {
-      return NextResponse.json({ error: "Storefront API not configured." }, { status: 501 });
+      return NextResponse.json({ configured: false });
     }
-    return NextResponse.json({ checkoutUrl });
-  } catch {
+    return NextResponse.json({ checkoutUrl, configured: true });
+  } catch (error) {
+    // A genuine outage: Shopify was configured but unreachable.
+    console.error("[shopify] Storefront checkout failed:", error);
     return NextResponse.json({ error: "Could not reach Shopify." }, { status: 502 });
   }
 }
