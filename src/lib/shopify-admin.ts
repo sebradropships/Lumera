@@ -17,24 +17,99 @@ import type { ProductVariant } from "@/data/product";
 
 const DOMAIN = process.env.SHOPIFY_STORE_DOMAIN?.trim().replace(/^https?:\/\//, "") ?? "";
 const TOKEN = process.env.SHOPIFY_ADMIN_TOKEN?.trim() ?? "";
-const API_VERSION = process.env.SHOPIFY_API_VERSION?.trim() || "2025-01";
+
+/**
+ * Shopify supports each quarterly version for about a year, so a hard-coded
+ * version silently rots: every call fails once it drops out of support. Keep
+ * this current, or override it with SHOPIFY_API_VERSION.
+ */
+const API_VERSION = process.env.SHOPIFY_API_VERSION?.trim() || "2026-01";
 
 /** Which product to feature. A handle is exact; otherwise the first match wins. */
 const HANDLE = process.env.SHOPIFY_PRODUCT_HANDLE?.trim() ?? "";
 const SEARCH = process.env.SHOPIFY_PRODUCT_QUERY?.trim() || "status:active";
 
 export const adminConfigured = Boolean(DOMAIN && TOKEN);
+export const apiVersion = API_VERSION;
+export const storeDomain = DOMAIN;
+export const productQuery = HANDLE ? `handle:${HANDLE}` : SEARCH;
+
+export type AdminResult<T> =
+  | { ok: true; data: T }
+  | { ok: false; status: number | null; error: string };
+
+/**
+ * One Admin GraphQL call. Surfaces the actual failure — HTTP status plus
+ * Shopify's own message — rather than collapsing everything to null, because
+ * "no product" and "your token lacks read_products" need different fixes.
+ */
+export async function adminGraphQL<T>(
+  query: string,
+  variables: Record<string, unknown> = {},
+  revalidate = 600,
+): Promise<AdminResult<T>> {
+  if (!adminConfigured) {
+    return { ok: false, status: null, error: "SHOPIFY_STORE_DOMAIN or SHOPIFY_ADMIN_TOKEN is not set." };
+  }
+
+  let res: Response;
+  try {
+    res = await fetch(`https://${DOMAIN}/admin/api/${API_VERSION}/graphql.json`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-Shopify-Access-Token": TOKEN,
+      },
+      body: JSON.stringify({ query, variables }),
+      next: { revalidate },
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { ok: false, status: null, error: `Could not reach ${DOMAIN}: ${message}` };
+  }
+
+  const body = await res.text();
+
+  if (!res.ok) {
+    // 401 -> bad token. 403 -> missing scope. 404 -> API version gone.
+    return {
+      ok: false,
+      status: res.status,
+      error: `HTTP ${res.status} from ${DOMAIN} (API ${API_VERSION}): ${body.slice(0, 300)}`,
+    };
+  }
+
+  let json: { data?: T; errors?: { message: string }[] };
+  try {
+    json = JSON.parse(body) as typeof json;
+  } catch {
+    return { ok: false, status: res.status, error: `Non-JSON response: ${body.slice(0, 300)}` };
+  }
+
+  if (json.errors?.length) {
+    return {
+      ok: false,
+      status: res.status,
+      error: `GraphQL: ${json.errors.map((e) => e.message).join("; ").slice(0, 300)}`,
+    };
+  }
+
+  if (!json.data) {
+    return { ok: false, status: res.status, error: "Response contained no data." };
+  }
+
+  return { ok: true, data: json.data };
+}
 
 const PRODUCT_QUERY = /* GraphQL */ `
   query LumeraProduct($query: String!) {
-    products(first: 1, query: $query, sortKey: RELEVANCE) {
+    products(first: 1, query: $query) {
       edges {
         node {
           id
           title
           handle
           description
-          onlineStoreUrl
           media(first: 10) {
             edges {
               node {
@@ -68,32 +143,29 @@ const PRODUCT_QUERY = /* GraphQL */ `
 
 type AdminImage = { url: string; altText: string | null; width: number | null; height: number | null };
 
-type AdminResponse = {
-  data?: {
-    products?: {
-      edges: {
-        node: {
-          id: string;
-          title: string;
-          handle: string;
-          description: string | null;
-          media: { edges: { node: { image?: AdminImage | null } }[] };
-          variants: {
-            edges: {
-              node: {
-                id: string;
-                title: string;
-                price: string;
-                compareAtPrice: string | null;
-                availableForSale: boolean;
-              };
-            }[];
-          };
+type ProductsData = {
+  products?: {
+    edges: {
+      node: {
+        id: string;
+        title: string;
+        handle: string;
+        description: string | null;
+        media: { edges: { node: { image?: AdminImage | null } }[] };
+        variants: {
+          edges: {
+            node: {
+              id: string;
+              title: string;
+              price: string;
+              compareAtPrice: string | null;
+              availableForSale: boolean;
+            };
+          }[];
         };
-      }[];
-    };
+      };
+    }[];
   };
-  errors?: { message: string }[];
 };
 
 export type LiveProduct = {
@@ -117,49 +189,38 @@ function toCents(money: string | null | undefined): number | undefined {
   return Number.isFinite(value) ? Math.round(value * 100) : undefined;
 }
 
+/** The reason the live product could not be used, for the diagnostic route. */
+export type ProductFailure = { reason: string; detail: string };
+
+let lastFailure: ProductFailure | null = null;
+export function lastProductFailure(): ProductFailure | null {
+  return lastFailure;
+}
+
 /**
  * Fetches the featured product. Returns null when Shopify isn't configured or
  * the call fails — the caller then uses the local defaults, so a store outage
  * degrades to a working page rather than a broken one.
- *
- * `cache` dedupes this across a single render; `revalidate` keeps it off the
- * critical path for repeat visitors.
  */
 export const fetchLiveProduct = cache(async (): Promise<LiveProduct | null> => {
-  if (!adminConfigured) return null;
-
-  const query = HANDLE ? `handle:${HANDLE}` : SEARCH;
-
-  let json: AdminResponse;
-  try {
-    const res = await fetch(`https://${DOMAIN}/admin/api/${API_VERSION}/graphql.json`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Shopify-Access-Token": TOKEN,
-      },
-      body: JSON.stringify({ query: PRODUCT_QUERY, variables: { query } }),
-      next: { revalidate: 600 },
-    });
-
-    if (!res.ok) {
-      console.error(`[shopify] Admin API responded ${res.status}`);
-      return null;
-    }
-    json = (await res.json()) as AdminResponse;
-  } catch (error) {
-    console.error("[shopify] Admin API request failed:", error);
+  if (!adminConfigured) {
+    lastFailure = { reason: "not_configured", detail: "Store domain or admin token is missing." };
     return null;
   }
 
-  if (json.errors?.length) {
-    console.error("[shopify] Admin API errors:", json.errors.map((e) => e.message).join("; "));
+  const result = await adminGraphQL<ProductsData>(PRODUCT_QUERY, { query: productQuery });
+
+  if (!result.ok) {
+    console.error(`[shopify] ${result.error}`);
+    lastFailure = { reason: "request_failed", detail: result.error };
     return null;
   }
 
-  const node = json.data?.products?.edges?.[0]?.node;
+  const node = result.data.products?.edges?.[0]?.node;
   if (!node) {
-    console.warn(`[shopify] No product matched query: ${query}`);
+    const detail = `No product matched "${productQuery}". A draft product will not match status:active.`;
+    console.warn(`[shopify] ${detail}`);
+    lastFailure = { reason: "no_match", detail };
     return null;
   }
 
@@ -193,10 +254,13 @@ export const fetchLiveProduct = cache(async (): Promise<LiveProduct | null> => {
     .filter((v) => v.price > 0);
 
   if (variants.length === 0) {
-    console.warn("[shopify] Product has no purchasable variants; using local defaults.");
+    const detail = `"${node.title}" has no variant that is both available for sale and priced above zero.`;
+    console.warn(`[shopify] ${detail}`);
+    lastFailure = { reason: "no_variants", detail };
     return null;
   }
 
+  lastFailure = null;
   return {
     title: node.title,
     handle: node.handle,
