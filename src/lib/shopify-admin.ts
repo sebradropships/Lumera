@@ -169,12 +169,25 @@ type ProductsData = {
 };
 
 export type LiveProduct = {
+  /** The store's own title. Kept for reference; the page uses brand copy. */
   title: string;
   handle: string;
   description: string | null;
   images: ProductImage[];
   variants: ProductVariant[];
 };
+
+/**
+ * Shopify auto-fills altText with a content hash for imported/dropshipped
+ * media. A hash is worse than nothing as an accessible label, so it is
+ * discarded in favour of a real description.
+ */
+function usableAltText(altText: string | null | undefined): string | null {
+  const value = altText?.trim();
+  if (!value) return null;
+  if (/^[0-9a-f]{16,}$/i.test(value)) return null;
+  return value;
+}
 
 /** "gid://shopify/ProductVariant/123" -> "123" */
 function numericId(gid: string): string {
@@ -202,7 +215,11 @@ export function lastProductFailure(): ProductFailure | null {
  * the call fails — the caller then uses the local defaults, so a store outage
  * degrades to a working page rather than a broken one.
  */
-export const fetchLiveProduct = cache(async (): Promise<LiveProduct | null> => {
+export const fetchLiveProduct = cache(async (
+  /** Brand-facing name, used for image alt text and variant labels. */
+  brandTitle = "Lumera Bio-Collagen Gel Face Mask",
+): Promise<LiveProduct | null> => {
+  const altBase = brandTitle;
   if (!adminConfigured) {
     lastFailure = { reason: "not_configured", detail: "Store domain or admin token is missing." };
     return null;
@@ -224,26 +241,40 @@ export const fetchLiveProduct = cache(async (): Promise<LiveProduct | null> => {
     return null;
   }
 
-  const images: ProductImage[] = node.media.edges
+  const usable = node.media.edges
     .map((edge) => edge.node.image)
-    .filter((image): image is AdminImage => Boolean(image?.url))
-    .map((image) => ({
-      src: image.url,
-      alt: image.altText?.trim() || node.title,
-      width: image.width ?? undefined,
-      height: image.height ?? undefined,
-    }));
+    .filter((image): image is AdminImage => Boolean(image?.url));
 
-  const variants: ProductVariant[] = node.variants.edges
-    .filter((edge) => edge.node.availableForSale)
+  // Shopify's featured image is often a low-res thumbnail while the rest of the
+  // set is full size. The hero slot needs the sharp ones, so anything at least
+  // 1000px wide leads, with the original order preserved inside each group.
+  const large = usable.filter((i) => (i.width ?? 0) >= 1000);
+  const small = usable.filter((i) => (i.width ?? 0) < 1000);
+  const ordered = large.length > 0 ? [...large, ...small] : usable;
+
+  const images: ProductImage[] = ordered.map((image, index) => ({
+    src: image.url,
+    alt:
+      usableAltText(image.altText) ??
+      (index === 0 ? altBase : `${altBase} — view ${index + 1}`),
+    width: image.width ?? undefined,
+    height: image.height ?? undefined,
+  }));
+
+  const sellable = node.variants.edges.filter((edge) => edge.node.availableForSale);
+  const singleVariant = sellable.length === 1;
+
+  const variants: ProductVariant[] = sellable
     .map((edge, index) => {
       const v = edge.node;
       const price = toCents(v.price) ?? 0;
       const compareAt = toCents(v.compareAtPrice);
       return {
         id: numericId(v.id),
-        // Shopify names a single-option product's variant "Default Title".
-        title: v.title === "Default Title" ? node.title : v.title,
+        // With one option there is nothing to choose between, and a supplier's
+        // packing spec ("1pc / 33.7g / 4.72*7.09*0.39inch") is not a label a
+        // shopper should see in their cart.
+        title: singleVariant || v.title === "Default Title" ? brandTitle : v.title,
         price,
         compareAtPrice: compareAt && compareAt > price ? compareAt : undefined,
         shopifyVariantId: numericId(v.id),

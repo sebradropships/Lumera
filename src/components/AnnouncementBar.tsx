@@ -9,11 +9,23 @@ import { msRemaining, offer } from "@/data/offer";
  * repeating window, the strip hides itself once that deadline passes so it
  * never advertises a price that is no longer available.
  */
-export default function AnnouncementBar() {
+export default function AnnouncementBar({
+  savingsPercent,
+}: {
+  /** Real saving on the featured product, or null when there is no discount. */
+  savingsPercent: number | null;
+}) {
   const [index, setIndex] = useState(0);
   const [live, setLive] = useState(true);
 
-  const messages = offer.strip.messages;
+  // The discount line only appears when there is a discount to name.
+  const messages =
+    savingsPercent && savingsPercent > 0
+      ? [
+          offer.strip.discountMessage.replace("{n}", String(savingsPercent)),
+          ...offer.strip.messages,
+        ]
+      : offer.strip.messages;
 
   useEffect(() => {
     // A repeating window never closes for good; a hard deadline does, and once

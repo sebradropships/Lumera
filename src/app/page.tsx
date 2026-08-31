@@ -4,14 +4,16 @@ import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import SocialProof from "@/components/SocialProof";
 import StickyBar from "@/components/StickyBar";
-import { getProduct } from "@/lib/product-source";
+import { savingsPercent } from "@/data/product";
+import { defaultVariantOf, getProduct } from "@/lib/product-source";
 
 export default async function Page() {
   const product = await getProduct();
+  const savings = savingsPercent(defaultVariantOf(product));
 
   return (
     <div id="top" className="bg-atmosphere min-h-dvh">
-      <AnnouncementBar />
+      <AnnouncementBar savingsPercent={savings} />
       <BrandHeader />
 
       <main>

@@ -27,12 +27,18 @@ export const offer = {
   strip: {
     enabled: true,
     /**
-     * Rotating messages. Keep each under ~32 characters or it truncates on a
+     * Shown first, with {n} replaced by the real saving. It is dropped entirely
+     * when the live product has no compare-at price, so the strip can never
+     * advertise a discount that does not exist.
+     */
+    discountMessage: "Limited offer — {n}% off",
+
+    /**
+     * Always-on messages. Keep each under ~32 characters or it truncates on a
      * 390px phone. Only claim shipping, returns or guarantees that your actual
      * store policy backs up.
      */
     messages: [
-      "Limited offer — 40% off",
       "Fast US delivery",
       "Secure checkout",
     ] as string[],

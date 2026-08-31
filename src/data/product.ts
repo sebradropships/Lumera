@@ -45,25 +45,28 @@ export const product = {
   currency: "USD",
 
   /**
-   * Variants. A single default variant is enough — add more (3-pack, 5-pack)
-   * and the selector appears automatically.
+   * Fallback variants, mirroring the live store so the page is accurate and
+   * purchasable even if the Shopify call fails. Shopify overrides these when
+   * it answers.
+   *
+   * There is deliberately no compareAtPrice: the store has no compare-at price
+   * set, so there is no discount, and every "save X%" badge stays hidden rather
+   * than inventing one. Set a compare-at price in Shopify and the savings
+   * appear on their own.
+   *
+   * Add more entries (3-pack, 5-pack) and the selector appears automatically —
+   * but only if those variants genuinely exist in the store, or checkout will
+   * reject them.
    */
   variants: [
     {
-      id: "single",
-      title: "1 Mask",
+      id: "47728384606379",
+      title: "Bio-Collagen Gel Mask",
       note: "One glow ritual",
-      price: 3900,
-      compareAtPrice: 6500,
+      price: 2999,
+      shopifyVariantId: "47728384606379",
+      shopifyVariantGid: "gid://shopify/ProductVariant/47728384606379",
       default: true,
-    },
-    {
-      id: "trio",
-      title: "3 Masks",
-      note: "A month of rituals",
-      price: 9900,
-      compareAtPrice: 19500,
-      badge: "BEST VALUE",
     },
   ] as ProductVariant[],
 

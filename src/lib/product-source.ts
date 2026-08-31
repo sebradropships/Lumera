@@ -7,8 +7,15 @@ import { fetchLiveProduct } from "@/lib/shopify-admin";
  * The product as the page should render it: live Shopify data when the store is
  * connected, the local defaults otherwise.
  *
- * Marketing copy (headline, eyebrow, benefits, CTA labels) always comes from
- * src/data/product.ts — Shopify owns commerce facts, not the funnel copy.
+ * Shopify owns commerce facts — price, compare-at price, variants, checkout ids
+ * and photography. Everything a shopper reads as brand voice stays in
+ * src/data/product.ts, the product NAME included.
+ *
+ * That split matters for a dropshipped catalogue: the store's own title is the
+ * supplier's SEO string ("Hoygi Collagen Moisturizing And Anti-Wrinkle Mask
+ * (Bag) Three-In-One..."), and pasting it into a branded landing page undoes
+ * the brand. Set SHOPIFY_USE_LIVE_TITLE=true if the store title really is the
+ * one customers should see.
  */
 export type ResolvedProduct = {
   title: string;
@@ -43,7 +50,7 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
     offer: localProduct.offer,
   };
 
-  const live = await fetchLiveProduct();
+  const live = await fetchLiveProduct(localProduct.title);
 
   if (!live) {
     return {
@@ -54,11 +61,14 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
     };
   }
 
+  const useLiveTitle = process.env.SHOPIFY_USE_LIVE_TITLE === "true";
+
   return {
     ...base,
-    title: live.title,
-    // Keep the short label tight for the sticky bar and cart lines.
-    shortTitle: live.title.replace(/^Lumera\s+/i, "") || localProduct.shortTitle,
+    title: useLiveTitle ? live.title : localProduct.title,
+    shortTitle: useLiveTitle
+      ? live.title.replace(/^Lumera\s+/i, "")
+      : localProduct.shortTitle,
     variants: live.variants,
     // Local photography, when present, still wins — it's the deliberate choice.
     images: localGallery.length > 0 ? localGallery : live.images,

@@ -145,7 +145,11 @@ export default function CartDrawer() {
                           <p className="truncate text-[13px] font-medium leading-tight text-ink">
                             {product.shortTitle}
                           </p>
-                          <p className="mt-0.5 text-[11.5px] text-muted">{variant.title}</p>
+                          {/* One-variant products label the line with the product
+                              name already; repeating it reads as a mistake. */}
+                          {variant.title !== product.shortTitle && (
+                            <p className="mt-0.5 text-[11.5px] text-muted">{variant.title}</p>
+                          )}
                         </div>
                         <button
                           type="button"
