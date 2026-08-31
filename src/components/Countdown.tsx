@@ -27,12 +27,15 @@ function Colon() {
 }
 
 /**
- * "Offer ends in" countdown to the single real deadline in `src/data/offer.ts`.
- * It does not reset per visitor. Once the deadline passes it says so instead of
- * restarting.
+ * "Offer ends in" countdown, configured in `src/data/offer.ts`.
  *
- * Renders nothing on the server pass so the first paint can't show a stale
- * number; it appears on mount.
+ * The clock is a pure function of the current time and a fixed UTC anchor, so
+ * every visitor sees the same number at the same instant — it is not reset per
+ * person, per session, or on page load. With a hard deadline instead of a
+ * repeating window, it reports that the offer ended rather than looping.
+ *
+ * Renders nothing on the server pass so the first paint can't show a number
+ * that's already stale by the time it reaches the browser.
  */
 export default function Countdown({ className = "" }: { className?: string }) {
   const [remaining, setRemaining] = useState<Remaining | null>(null);

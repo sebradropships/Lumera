@@ -108,7 +108,7 @@
     @apply h-px w-full bg-gradient-to-r from-transparent via-rosedust to-transparent;
   }
 
-  /* Primary CTA — babypink-to-ink, with a slow pink sheen on hover. */
+  /* Primary CTA — deep ink, with a slow light sheen on hover. */
   .btn-primary {
     @apply relative inline-flex w-full items-center justify-center gap-2 overflow-hidden
       rounded-full bg-ink px-7 py-[18px] text-[13px] font-medium uppercase
@@ -170,7 +170,7 @@
     scrollbar-width: none;
   }
 
-  /* Warm blush field with soft babypink light — the page's base atmosphere. */
+  /* Blush field lit with soft pink — the page's base atmosphere. */
   .bg-atmosphere {
     background:
       radial-gradient(120% 70% at 50% -10%, #fffafc 0%, rgba(255, 250, 252, 0) 60%),

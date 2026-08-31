@@ -5,8 +5,9 @@ import { DiamondIcon } from "@/components/Icons";
 import { msRemaining, offer } from "@/data/offer";
 
 /**
- * Sale strip above the header. Hides itself once the launch offer has actually
- * ended, so it never advertises an expired price.
+ * Sale strip above the header. When the offer is a hard deadline rather than a
+ * repeating window, the strip hides itself once that deadline passes so it
+ * never advertises a price that is no longer available.
  */
 export default function AnnouncementBar() {
   const [index, setIndex] = useState(0);
