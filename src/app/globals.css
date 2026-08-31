@@ -157,6 +157,24 @@
     padding-bottom: calc(var(--safe-bottom) + 0.75rem);
   }
 
+  /*
+   * Marquee. The shift is exactly one sequence in pixels, not a percentage of
+   * the track: the copy count varies with viewport width, so a percentage would
+   * move a different distance on every screen and break the seam.
+   */
+  .marquee-track {
+    animation: marquee-shift var(--marquee-duration, 20s) linear infinite;
+  }
+
+  @keyframes marquee-shift {
+    from {
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      transform: translate3d(calc(var(--marquee-shift, 0px) * -1), 0, 0);
+    }
+  }
+
   /* Lining, uniform-width digits — oldstyle figures misread in a countdown. */
   .lining-nums {
     font-variant-numeric: lining-nums tabular-nums;

@@ -53,18 +53,11 @@ const config: Config = {
           "0%": { transform: "translateX(-120%)" },
           "100%": { transform: "translateX(220%)" },
         },
-        // The track holds two identical copies, so travelling exactly half its
-        // width lands on the seam and the loop is invisible.
-        marquee: {
-          from: { transform: "translate3d(0, 0, 0)" },
-          to: { transform: "translate3d(-50%, 0, 0)" },
-        },
       },
       animation: {
         "fade-up": "fade-up 0.7s cubic-bezier(0.22,1,0.36,1) both",
         "slide-in": "slide-in 0.42s cubic-bezier(0.22,1,0.36,1) both",
         "fade-in": "fade-in 0.3s ease-out both",
-        marquee: "marquee var(--marquee-duration, 22s) linear infinite",
       },
     },
   },

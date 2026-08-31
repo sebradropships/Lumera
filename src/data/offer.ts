@@ -44,11 +44,15 @@ export const offer = {
     discountMessage: "{n}% OFF TODAY",
 
     /**
-     * Seconds for one full pass. Higher is slower. Motion this persistent has
-     * to be escapable, so it pauses on hover and on keyboard focus, and holds
-     * still entirely under prefers-reduced-motion.
+     * Scroll speed in pixels per second. Expressed as speed rather than loop
+     * duration because the loop length depends on how much text is in the
+     * sequence and how wide the screen is — a fixed duration would run at a
+     * different speed on every device.
+     *
+     * Motion this persistent has to be escapable, so it pauses on hover and on
+     * keyboard focus, and holds still under prefers-reduced-motion.
      */
-    loopSeconds: 22,
+    pixelsPerSecond: 45,
   },
 
   /**
