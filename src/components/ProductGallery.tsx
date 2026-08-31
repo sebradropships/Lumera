@@ -53,7 +53,7 @@ export default function ProductGallery() {
       {/* Soft babypink halo behind the product */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -inset-x-6 -top-8 bottom-8 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgba(234,223,209,0.85),rgba(234,223,209,0))] blur-xl"
+        className="pointer-events-none absolute -inset-x-6 -top-8 bottom-8 -z-10 rounded-[50%] bg-[radial-gradient(closest-side,rgba(249,214,225,0.9),rgba(249,214,225,0))] blur-xl"
       />
 
       <div
