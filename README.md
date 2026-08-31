@@ -1,7 +1,8 @@
 # LUMERA
 
-A premium, mobile-first, single-product landing page for the **Lumera Bio-Collagen Gel
-Face Mask** — built as a direct-response funnel, not a Shopify template.
+A pink, mobile-first, single-product landing page for the **Lumera Bio-Collagen
+Gel Face Mask**, backed by a live Shopify store. Built as a direct-response
+funnel, not a Shopify template.
 
 Next.js 15 (App Router) · React 19 · TypeScript · Tailwind CSS.
 
@@ -13,12 +14,12 @@ Exactly three main sections, in funnel order:
 
 | # | Section | Job |
 |---|---------|-----|
-| 1 | **Hero / Product / Purchase** | Gallery, headline, benefits, offer, quantity, add-to-cart, buy-now |
+| 1 | **Hero / Product / Purchase** | Gallery, headline, benefits, offer, countdown, quantity, add-to-cart, buy-now |
 | 2 | **Why Lumera** | Three benefit cards + a compact three-step "How it works" |
 | 3 | **Social proof + Final CTA** | Reviews (see below) and the closing offer block |
 
-Plus a sticky brand header, a mobile purchase bar, a cart drawer, and a minimal
-legal footer. No about page, no blog, no FAQ, no newsletter block.
+Plus a sale strip, sticky brand header, mobile purchase bar, cart drawer, and a
+minimal legal footer. No about page, no blog, no FAQ, no newsletter block.
 
 ## Quick start
 
@@ -28,98 +29,108 @@ cp .env.example .env.local   # fill in your Shopify details
 npm run dev                  # http://localhost:3000
 ```
 
+---
+
+## Shopify
+
+Two server-side variables are the entire configuration:
+
 ```bash
-npm run build && npm start   # production
+SHOPIFY_STORE_DOMAIN=your-store.myshopify.com
+SHOPIFY_ADMIN_TOKEN=shpat_...     # secret — never NEXT_PUBLIC_
 ```
+
+With those set, the store supplies the **commerce facts** — price, compare-at
+price, variants, checkout IDs and photography (served from `cdn.shopify.com`).
+Checkout works through a cart permalink; no Storefront token needed.
+
+Nothing store-related is inlined at build time, so setting these on an
+already-deployed site takes effect without a rebuild.
+
+**The store does not supply brand copy.** Headline, benefits, CTA labels and the
+product *name* stay in `src/data/product.ts`. That split matters for a
+dropshipped catalogue, where the store's own title is the supplier's SEO string.
+Set `SHOPIFY_USE_LIVE_TITLE=true` if your store title really is customer-facing.
+
+### Is it connected?
+
+```
+GET /api/shopify-status
+```
+
+Runs three probes — reach the shop, count the products, run the product query —
+and names the specific cause and fix when one fails. Returns no secrets.
+
+Common causes: a **401** means the token is wrong or revoked; a **403** means the
+app is missing the `read_products` scope; a **404** usually means the API version
+has aged out of Shopify's ~1-year support window (see `SHOPIFY_API_VERSION`).
+
+### Choosing the product
+
+`SHOPIFY_PRODUCT_QUERY` defaults to `status:active` and takes the first match.
+Set `SHOPIFY_PRODUCT_HANDLE` to target one product exactly, regardless of status.
 
 ---
 
-## Connecting Shopify
+## The offer
 
-Checkout has two paths and falls back automatically.
+`src/data/offer.ts` drives the sale strip and the countdown.
 
-**1. Cart permalink — no API app needed.** Set your store domain and the numeric
-variant IDs, and every CTA opens a real Shopify checkout:
+**Countdown.** `recurringWindowHours` (default 8) is anchored to a fixed UTC
+epoch, so every visitor sees the same number at the same instant and it rolls
+over on shared boundaries — 00:00, 08:00, 16:00 UTC. It is *not* restarted per
+person, per session, or on page load. Set it to `null` and use `endsAt` for a
+single hard deadline instead.
 
-```bash
-# .env.local
-NEXT_PUBLIC_SHOPIFY_DOMAIN=your-store.myshopify.com
-```
+> A countdown implies a deadline. If the price never actually changes when the
+> clock hits zero, the urgency is fictional — the FTC and the EU Omnibus
+> Directive both treat that as a deceptive practice. If you run the recurring
+> window, genuinely cycle the offer.
 
-```ts
-// src/data/product.ts
-{ id: "single", title: "1 Mask", price: 3900, shopifyVariantId: "45123456789012" }
-```
-
-**2. Storefront API — preferred.** Adds a real Shopify cart via `POST /api/checkout`.
-In Shopify admin: *Settings → Apps and sales channels → Develop apps →* create an app,
-enable Storefront API access with `unauthenticated_write_checkouts`, then:
-
-```bash
-SHOPIFY_STOREFRONT_TOKEN=your_storefront_token
-```
-
-```ts
-// src/data/product.ts
-{ …, shopifyVariantGid: "gid://shopify/ProductVariant/45123456789012" }
-```
-
-Until either is configured the cart works locally and the drawer says checkout
-isn't connected yet, rather than sending shoppers to a dead link.
-
-### Where to find your variant IDs
-
-Shopify admin → the product → click a variant. The URL ends in
-`/variants/45123456789012` — that number is `shopifyVariantId`, and
-`gid://shopify/ProductVariant/45123456789012` is `shopifyVariantGid`.
+**Discounts are never invented.** Every "save X%" badge, the struck-through
+price and the strip's discount line all derive from the live compare-at price.
+No compare-at price means no discount claim anywhere on the page. Set one in
+Shopify and they appear on their own.
 
 ---
 
-## What you need to replace before launch
+## Typography
 
-Three placeholders are deliberate. Each is isolated in one file.
+**Gilroy** is a commercial typeface (Fontfabric) and is not bundled. The font
+stack lists it first with **Outfit** behind it, so proportions hold either way.
+See `public/fonts/README.md` for the two steps to install it.
 
-### 1. Pricing — `src/data/product.ts`
+## Palette
 
-`$39` (was `$65`, 40% off) and the 3-pack are stand-ins. Set `price` and
-`compareAtPrice` in **cents**. The savings badges, the sticky bar and the final
-offer all recompute from these — no other file to touch.
-
-### 2. Product photography — `src/data/media.ts`
-
-No photography was supplied, so the page renders hand-drawn SVG art panels
-(`src/components/ProductArt.tsx`) — deliberately illustrative rather than a fake
-photo of a product that hasn't been shot. Drop files in `public/product/` or paste
-Shopify CDN URLs into `gallery`, and the SVGs are replaced automatically:
-
-```ts
-export const gallery: ProductImage[] = [
-  { src: "/product/lumera-jar.jpg", alt: "Lumera Bio-Collagen Gel Face Mask jar" },
-];
+```
+blush    #FFF7F9   page ground        ink       #2B1F24   headings
+petal    #FDEFF3   section fill       plum      #574450   body copy
+babypink #F9D6E1   accent fill        muted     #7E6A72   secondary
+rosedust #EFC3D0   hairlines          pink      #C2456B   accent, sale strip
+                                      pinksoft  #F0A8BE   decorative
 ```
 
-Shoot at 4:5 (1200×1500). `cdn.shopify.com` is already allow-listed in
-`next.config.ts`. Images are lazy-loaded and served as AVIF/WebP; only the first
-gallery frame is eager.
+Contrast checked: pink on blush 5.3:1, white on pink 5.3:1, muted on blush 5:1.
+Sale strip and savings pills carry the pink; CTAs stay ink so the primary action
+still reads first.
 
-### 3. Reviews — `src/data/reviews.ts`
+---
 
-`reviews` is **empty on purpose** — inventing customers would be fabricated social
-proof. Add real ones there and section 3 uses them automatically.
+## Reviews
+
+`src/data/reviews.ts` is **empty on purpose** — inventing customers would be
+fabricated social proof. Add real ones there and section 3 uses them.
 
 `NEXT_PUBLIC_SHOW_PLACEHOLDER_REVIEWS=true` renders three layout placeholders,
-each with a visible **SAMPLE** chip and a banner above the row. **Set this to
-`false` in production.** With no reviews and the flag off, the section states
-plainly that reviews haven't been collected yet.
-
----
+each with a visible **SAMPLE** chip and a banner above the row. **Keep this
+false in production.** With no reviews and the flag off, the section says plainly
+that reviews haven't been collected yet.
 
 ## Claims
 
-Copy is cosmetic throughout — *hydrates*, *helps skin look smoother*, *dewy-looking*.
-No medical claims, no guaranteed results, no "clinically proven", no invented review
-counts, no resetting countdown timers. The only urgency is the launch price, which is
-real because you set it. Please keep it that way when editing.
+Copy is cosmetic throughout — *hydrates*, *helps skin look smoother*,
+*dewy-looking*. No medical claims, no guaranteed results, no invented review
+counts, no fabricated discounts. Please keep it that way when editing.
 
 ---
 
@@ -128,27 +139,36 @@ real because you set it. Please keep it that way when editing.
 Designed at 390 × 844 first; desktop is the enhanced version.
 
 - Product visible immediately; the price sits above the fold on a 390px phone.
-- Sticky purchase bar appears after the visitor scrolls and the hero CTA leaves the
-  screen — and hides while the cart drawer is open, so it never covers checkout.
+- Sticky purchase bar appears after the visitor scrolls and the hero CTA leaves
+  the screen — and hides while the cart drawer is open.
 - `env(safe-area-inset-bottom)` respected on the sticky bar and drawer.
-- No horizontal overflow at any width (verified at 390 and 1440).
-- ~117 kB First Load JS, no client-side data fetching on first paint.
+- No horizontal overflow at any width (verified at 320, 390 and 1440).
 
 ## Accessibility
 
-Semantic landmarks and one `h1`; keyboard-operable controls throughout; the cart
-drawer traps focus, closes on `Escape` and restores scroll; visible gold focus
-rings; `aria-live` on the quantity value; all animation disabled under
-`prefers-reduced-motion`.
+Semantic landmarks and one `h1`; keyboard-operable controls; the cart drawer
+traps focus, closes on `Escape` and restores scroll; visible focus rings; 36px+
+tap targets; `aria-live` on the quantity; the countdown carries a spoken label
+but does not announce every second; all animation disabled under
+`prefers-reduced-motion`. Shopify alt text that is a content hash is discarded
+in favour of a real description.
 
 ## Structure
 
 ```
 src/
-  app/          layout (fonts, metadata, JSON-LD), page, globals.css, api/checkout
-  components/   BrandHeader, Hero, ProductGallery, PurchasePanel, QuantityStepper,
-                Experience, SocialProof, FinalCta, StickyBar, CartDrawer, Reveal,
+  app/          layout, page, globals.css, api/checkout, api/shopify-status
+  components/   AnnouncementBar, BrandHeader, Hero, ProductGallery,
+                PurchasePanel, Countdown, QuantityStepper, Experience,
+                SocialProof, FinalCta, StickyBar, CartDrawer, Reveal,
                 ProductArt, Icons
-  lib/          cart.tsx (cart state + checkout), shopify.ts (Storefront API + permalink)
-  data/         product.ts, media.ts, reviews.ts   ← everything you edit lives here
+  lib/          shopify-admin.ts (live product) · product-source.ts (live over
+                local) · cart.tsx (cart + checkout) · shopify.ts (permalink)
+  data/         product.ts, offer.ts, media.ts, reviews.ts   ← what you edit
 ```
+
+## Deploying
+
+The Vercel project is linked to this repository, so every push to the production
+branch deploys automatically. Set `SHOPIFY_STORE_DOMAIN` and
+`SHOPIFY_ADMIN_TOKEN` for the Production environment in Vercel.
