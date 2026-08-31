@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section id="offer" aria-labelledby="hero-heading" className="relative pb-16 pt-4 sm:pt-6 lg:pb-24">
       <h2 id="hero-heading" className="sr-only">
-        Lumera Bio-Collagen Gel Face Mask
+        Hoygi Bio-Collagen Gel Face Mask
       </h2>
 
       <div className="shell">

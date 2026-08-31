@@ -1,5 +1,5 @@
 /**
- * Built-in Lumera art panels — used until real product photography is added to
+ * Built-in Hoygi art panels — used until real product photography is added to
  * `src/data/media.ts`. Deliberately illustrative (soft babypink light, glass,
  * gel) rather than a fake photograph of a product that hasn't been shot yet.
  */
@@ -90,7 +90,7 @@ function Jar({ id }: { id: string }) {
         fill="#B0587A"
         opacity="0.72"
       >
-        LUMERA
+        HOYGI
       </text>
     </g>
   );
@@ -202,7 +202,7 @@ export default function ProductArt({
       viewBox="0 0 400 500"
       className={className}
       role="img"
-      aria-label="Lumera Bio-Collagen Gel Face Mask illustration"
+      aria-label="Hoygi Bio-Collagen Gel Face Mask illustration"
       preserveAspectRatio="xMidYMid slice"
     >
       {gradients(id)}

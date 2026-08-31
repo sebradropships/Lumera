@@ -69,7 +69,7 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
     >
       <div className="shell">
         <Reveal className="mx-auto max-w-[34rem] text-center">
-          <p className="eyebrow">WHY LUMERA</p>
+          <p className="eyebrow">WHY HOYGI</p>
           <h2
             id="experience-heading"
             className="display mt-3 text-[32px] sm:text-[42px] lg:text-[50px]"

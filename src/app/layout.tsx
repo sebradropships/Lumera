@@ -17,15 +17,15 @@ const sans = Outfit({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://lumera.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hoygi.com";
 const description =
   "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 20-minute glow ritual.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "Lumera — Bio-Collagen Gel Face Mask",
-    template: "%s · Lumera",
+    default: "Hoygi — Bio-Collagen Gel Face Mask",
+    template: "%s · Hoygi",
   },
   description,
   keywords: [
@@ -34,21 +34,21 @@ export const metadata: Metadata = {
     "hydrating face mask",
     "Korean skincare",
     "glow ritual",
-    "Lumera",
+    "Hoygi",
   ],
-  applicationName: "Lumera",
+  applicationName: "Hoygi",
   alternates: { canonical: "/" },
   openGraph: {
     type: "website",
     url: siteUrl,
-    siteName: "Lumera",
-    title: "Lumera — Your Skin's 20-Minute Glow Reset",
+    siteName: "Hoygi",
+    title: "Hoygi — Your Skin's 20-Minute Glow Reset",
     description,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Lumera — Your Skin's 20-Minute Glow Reset",
+    title: "Hoygi — Your Skin's 20-Minute Glow Reset",
     description,
   },
   robots: { index: true, follow: true },
@@ -71,7 +71,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.title,
-    brand: { "@type": "Brand", name: "Lumera" },
+    brand: { "@type": "Brand", name: "Hoygi" },
     description,
     category: "Beauty & Personal Care > Skin Care > Face Masks",
     ...(product.images[0] ? { image: product.images[0].src } : {}),

@@ -62,7 +62,7 @@ export default function SocialProof({ product }: { product: ResolvedProduct }) {
         ) : (
           <Reveal className="mx-auto mt-8 max-w-[34rem] text-center">
             <p className="text-[15px] leading-[1.65] text-plum">
-              Lumera is newly launched, so we haven&apos;t collected customer reviews yet. Every
+              Hoygi is newly launched, so we haven&apos;t collected customer reviews yet. Every
               review published here will come from a real, verified order.
             </p>
           </Reveal>

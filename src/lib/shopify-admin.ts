@@ -107,7 +107,7 @@ export async function adminGraphQL<T>(
 }
 
 const PRODUCT_QUERY = /* GraphQL */ `
-  query LumeraProduct($query: String!) {
+  query HoygiProduct($query: String!) {
     products(first: 1, query: $query) {
       edges {
         node {
@@ -163,7 +163,7 @@ export function lastProductFailure(): ProductFailure | null {
  */
 export const fetchLiveProduct = cache(async (
   /** Brand-facing name, used for image alt text and variant labels. */
-  brandTitle = "Lumera Bio-Collagen Gel Face Mask",
+  brandTitle = "Hoygi Bio-Collagen Gel Face Mask",
 ): Promise<LiveProduct | null> => {
   if (!adminConfigured) {
     lastFailure = { reason: "not_configured", detail: "Store domain or admin token is missing." };

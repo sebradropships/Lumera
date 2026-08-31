@@ -71,7 +71,7 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
     ...base,
     title: useLiveTitle ? live.title : localProduct.title,
     shortTitle: useLiveTitle
-      ? live.title.replace(/^Lumera\s+/i, "")
+      ? live.title.replace(/^Hoygi\s+/i, "")
       : localProduct.shortTitle,
     variants: live.variants,
     // Local photography, when present, still wins — it's the deliberate choice.

@@ -2,7 +2,7 @@
  * ── CUSTOMER REVIEWS ─────────────────────────────────────────────────────────
  *
  * `reviews` is EMPTY on purpose. No customer testimonials have been collected
- * for Lumera yet, and inventing them would be fabricated social proof.
+ * for Hoygi yet, and inventing them would be fabricated social proof.
  *
  * TO GO LIVE WITH REAL REVIEWS:
  *   1. Add each genuine review to the `reviews` array below.

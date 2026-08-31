@@ -1,6 +1,6 @@
-# LUMERA
+# HOYGI
 
-A pink, mobile-first, single-product landing page for the **Lumera Bio-Collagen
+A pink, mobile-first, single-product landing page for the **Hoygi Bio-Collagen
 Gel Face Mask**, backed by a live Shopify store. Built as a direct-response
 funnel, not a Shopify template.
 
@@ -15,7 +15,7 @@ Exactly three main sections, in funnel order:
 | # | Section | Job |
 |---|---------|-----|
 | 1 | **Hero / Product / Purchase** | Gallery, headline, benefits, offer, countdown, quantity, add-to-cart, buy-now |
-| 2 | **Why Lumera** | Three benefit cards + a compact three-step "How it works" |
+| 2 | **Why Hoygi** | Three benefit cards + a compact three-step "How it works" |
 | 3 | **Social proof + Final CTA** | Reviews (see below) and the closing offer block |
 
 Plus a sale strip, sticky brand header, mobile purchase bar, cart drawer, and a

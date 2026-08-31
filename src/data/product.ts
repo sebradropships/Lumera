@@ -1,5 +1,5 @@
 /**
- * Single source of truth for the Lumera product, pricing and offer copy.
+ * Single source of truth for the Hoygi product, pricing and offer copy.
  *
  * ── Connecting the live Shopify store ────────────────────────────────────────
  * Set these two in `.env.local` (see `.env.example`) and everything below
@@ -35,8 +35,8 @@ export type ProductVariant = {
 };
 
 export const product = {
-  brand: "LUMERA",
-  title: "Lumera Bio-Collagen Gel Face Mask",
+  brand: "HOYGI",
+  title: "Hoygi Bio-Collagen Gel Face Mask",
   shortTitle: "Bio-Collagen Gel Mask",
   eyebrow: "THE GLOW RITUAL",
   headline: "Your Skin's 20-Minute Glow Reset.",
@@ -79,8 +79,8 @@ export const product = {
   offer: {
     label: "LIMITED OFFER",
     urgency: "Limited offer · ends soon",
-    ctaPrimary: "GET MY LUMERA MASK",
-    ctaFinal: "GET LUMERA NOW",
+    ctaPrimary: "GET MY HOYGI MASK",
+    ctaFinal: "GET HOYGI NOW",
     microcopy: "Secure checkout · Fast US delivery",
   },
 } as const;

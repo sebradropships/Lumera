@@ -107,7 +107,7 @@ export default function PurchasePanel() {
                   >
                     <input
                       type="radio"
-                      name="lumera-variant"
+                      name="hoygi-variant"
                       value={option.id}
                       checked={selected}
                       onChange={() => setVariantId(option.id)}

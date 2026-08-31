@@ -20,7 +20,7 @@ export default async function Page() {
         {/* 1 — Hero / product / purchase */}
         <Hero />
 
-        {/* 2 — Why Lumera: experience + how it works */}
+        {/* 2 — Why Hoygi: experience + how it works */}
         <Experience product={product} />
 
         {/* 3 — Social proof + final CTA */}
@@ -29,14 +29,14 @@ export default async function Page() {
 
       <footer className="border-t border-rosedust/50 px-5 pb-28 pt-8 text-center sm:pb-12 lg:pb-12">
         <p className="font-serif text-[13px] uppercase tracking-brand text-ink">
-          <span className="pl-[0.42em]">LUMERA</span>
+          <span className="pl-[0.42em]">HOYGI</span>
         </p>
         <p className="mx-auto mt-3 max-w-[42ch] text-[11px] leading-relaxed text-muted">
-          Lumera is a cosmetic skincare product, not a medical treatment. Results and appearance
+          Hoygi is a cosmetic skincare product, not a medical treatment. Results and appearance
           vary from person to person.
         </p>
         <p className="mt-3 text-[11px] text-muted">
-          © {new Date().getFullYear()} Lumera. All rights reserved.
+          © {new Date().getFullYear()} Hoygi. All rights reserved.
         </p>
       </footer>
 

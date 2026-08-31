@@ -29,9 +29,9 @@ export default function BrandHeader() {
         <a
           href="#top"
           className="flex h-10 items-center font-serif text-[15px] font-medium uppercase tracking-brand text-ink sm:text-[17px]"
-          aria-label="Lumera — back to top"
+          aria-label="Hoygi — back to top"
         >
-          <span className="pl-[0.42em]">LUMERA</span>
+          <span className="pl-[0.42em]">HOYGI</span>
         </a>
 
         <button

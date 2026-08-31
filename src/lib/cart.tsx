@@ -41,7 +41,7 @@ type CartState = {
 
 const CartContext = createContext<CartState | null>(null);
 
-const STORAGE_KEY = "lumera.cart.v1";
+const STORAGE_KEY = "hoygi.cart.v1";
 
 /**
  * Stored lines are dropped when they no longer match a live variant — a price
