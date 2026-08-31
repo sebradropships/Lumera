@@ -10,7 +10,7 @@ import {
 } from "react";
 import type { ProductVariant } from "@/data/product";
 import type { ResolvedProduct } from "@/lib/product-source";
-import { cartPermalink, SHOPIFY_DOMAIN } from "@/lib/shopify";
+import { cartPermalink } from "@/lib/shopify";
 
 export type CartLine = {
   variantId: string;
@@ -177,8 +177,8 @@ export function CartProvider({
     }
 
     // 2. Cart permalink.
-    return cartPermalink(payload);
-  }, [variantById]);
+    return cartPermalink(payload, product.shopifyDomain);
+  }, [variantById, product.shopifyDomain]);
 
   const startCheckout = useCallback(
     async (target: CartLine[]) => {
@@ -192,7 +192,7 @@ export function CartProvider({
           return;
         }
         setCheckoutError(
-          SHOPIFY_DOMAIN
+          product.shopifyDomain
             ? "Checkout isn't available yet — this product still needs its Shopify variant ID."
             : "Checkout isn't connected yet. Add your Shopify store details to enable it.",
         );
@@ -201,7 +201,7 @@ export function CartProvider({
         setIsCheckingOut(false);
       }
     },
-    [resolveCheckoutUrl],
+    [resolveCheckoutUrl, product.shopifyDomain],
   );
 
   const checkout = useCallback(() => startCheckout(lines), [lines, startCheckout]);

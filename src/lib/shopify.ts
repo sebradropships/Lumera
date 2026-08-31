@@ -7,7 +7,7 @@
  *     `shopifyVariantGid` on the variants. `/api/checkout` creates a real cart
  *     and returns Shopify's hosted `checkoutUrl`.
  *  2. Cart permalink (zero-config fallback) — requires only
- *     NEXT_PUBLIC_SHOPIFY_DOMAIN and numeric `shopifyVariantId`s. Builds
+ *     SHOPIFY_STORE_DOMAIN and numeric `shopifyVariantId`s. Builds
  *     `https://<domain>/cart/<variantId>:<qty>` which Shopify turns into a
  *     checkout.
  *
@@ -15,23 +15,24 @@
  * the store is not connected yet, rather than sending the shopper nowhere.
  */
 
-export const SHOPIFY_DOMAIN = process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN?.trim() ?? "";
-
 export type CheckoutLine = { variantId?: string; variantGid?: string; quantity: number };
 
-/** Cart-permalink checkout URL, or null when the store/variant ids are missing. */
-export function cartPermalink(lines: CheckoutLine[]): string | null {
-  if (!SHOPIFY_DOMAIN) return null;
+/**
+ * Cart-permalink checkout URL, or null when the store or variant ids are
+ * missing.
+ *
+ * The domain is passed in rather than read from a NEXT_PUBLIC_ variable: those
+ * are inlined at build time, so a store connected after the fact would need a
+ * rebuild. Resolving it server-side means setting the env var is enough.
+ */
+export function cartPermalink(lines: CheckoutLine[], domain: string): string | null {
+  if (!domain) return null;
   const parts = lines
     .filter((l) => l.variantId && l.quantity > 0)
     .map((l) => `${l.variantId}:${l.quantity}`);
   if (parts.length === 0) return null;
-  return `https://${SHOPIFY_DOMAIN}/cart/${parts.join(",")}`;
+  return `https://${domain}/cart/${parts.join(",")}`;
 }
-
-export const storefrontConfigured = Boolean(
-  process.env.SHOPIFY_STOREFRONT_TOKEN && process.env.NEXT_PUBLIC_SHOPIFY_DOMAIN,
-);
 
 const API_VERSION = process.env.SHOPIFY_API_VERSION?.trim() || "2025-01";
 
@@ -54,14 +55,15 @@ export async function createStorefrontCheckout(
   lines: CheckoutLine[],
 ): Promise<string | null> {
   const token = process.env.SHOPIFY_STOREFRONT_TOKEN;
-  if (!token || !SHOPIFY_DOMAIN) return null;
+  const domain = process.env.SHOPIFY_STORE_DOMAIN?.trim().replace(/^https?:\/\//, "") ?? "";
+  if (!token || !domain) return null;
 
   const cartLines = lines
     .filter((l) => l.variantGid && l.quantity > 0)
     .map((l) => ({ merchandiseId: l.variantGid, quantity: l.quantity }));
   if (cartLines.length === 0) return null;
 
-  const res = await fetch(`https://${SHOPIFY_DOMAIN}/api/${API_VERSION}/graphql.json`, {
+  const res = await fetch(`https://${domain}/api/${API_VERSION}/graphql.json`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

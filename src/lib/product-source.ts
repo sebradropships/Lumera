@@ -23,10 +23,16 @@ export type ResolvedProduct = {
   offer: typeof localProduct.offer;
   /** True when prices and photography came from the live store. */
   isLive: boolean;
+  /** Store domain, resolved server-side so checkout needs no build-time var. */
+  shopifyDomain: string;
 };
 
 export const getProduct = cache(async (): Promise<ResolvedProduct> => {
+  const shopifyDomain =
+    process.env.SHOPIFY_STORE_DOMAIN?.trim().replace(/^https?:\/\//, "") ?? "";
+
   const base = {
+    shopifyDomain,
     title: localProduct.title,
     shortTitle: localProduct.shortTitle,
     eyebrow: localProduct.eyebrow,
