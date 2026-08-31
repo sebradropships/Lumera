@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Inter } from "next/font/google";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
-import { product } from "@/data/product";
+import { getProduct, defaultVariantOf } from "@/lib/product-source";
 import "./globals.css";
 
 const serif = Cormorant_Garamond({
@@ -63,27 +63,32 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
-const productJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Product",
-  name: product.title,
-  brand: { "@type": "Brand", name: "Lumera" },
-  description,
-  category: "Beauty & Personal Care > Skin Care > Face Masks",
-  offers: {
-    "@type": "Offer",
-    priceCurrency: product.currency,
-    price: (product.variants[0].price / 100).toFixed(2),
-    availability: "https://schema.org/InStock",
-    url: siteUrl,
-  },
-};
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const product = await getProduct();
+  const variant = defaultVariantOf(product);
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+  // Structured data reflects whatever is actually on sale — live price included.
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: product.title,
+    brand: { "@type": "Brand", name: "Lumera" },
+    description,
+    category: "Beauty & Personal Care > Skin Care > Face Masks",
+    ...(product.images[0] ? { image: product.images[0].src } : {}),
+    offers: {
+      "@type": "Offer",
+      priceCurrency: product.currency,
+      price: (variant.price / 100).toFixed(2),
+      availability: "https://schema.org/InStock",
+      url: siteUrl,
+    },
+  };
+
   return (
     <html lang="en" className={`${serif.variable} ${sans.variable}`}>
       <body>
-        <CartProvider>
+        <CartProvider product={product}>
           {children}
           <CartDrawer />
         </CartProvider>

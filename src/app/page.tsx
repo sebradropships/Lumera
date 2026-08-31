@@ -1,12 +1,17 @@
+import AnnouncementBar from "@/components/AnnouncementBar";
 import BrandHeader from "@/components/BrandHeader";
 import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import SocialProof from "@/components/SocialProof";
 import StickyBar from "@/components/StickyBar";
+import { getProduct } from "@/lib/product-source";
 
-export default function Page() {
+export default async function Page() {
+  const product = await getProduct();
+
   return (
     <div id="top" className="bg-atmosphere min-h-dvh">
+      <AnnouncementBar />
       <BrandHeader />
 
       <main>
@@ -17,7 +22,7 @@ export default function Page() {
         <Experience />
 
         {/* 3 — Social proof + final CTA */}
-        <SocialProof />
+        <SocialProof product={product} />
       </main>
 
       <footer className="border-t border-sand/50 px-5 pb-28 pt-8 text-center sm:pb-12 lg:pb-12">

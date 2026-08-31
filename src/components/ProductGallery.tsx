@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductArt from "@/components/ProductArt";
-import { gallery } from "@/data/media";
-import { product } from "@/data/product";
+import type { ProductImage } from "@/data/media";
+import { useCart } from "@/lib/cart";
 
-type Slide = { key: string; art?: "jar" | "mask" | "texture"; image?: (typeof gallery)[number] };
+type Slide = { key: string; art?: "jar" | "mask" | "texture"; image?: ProductImage };
 
 const fallbackSlides: Slide[] = [
   { key: "jar", art: "jar" },
@@ -14,21 +14,25 @@ const fallbackSlides: Slide[] = [
   { key: "texture", art: "texture" },
 ];
 
-const slides: Slide[] =
-  gallery.length > 0
-    ? gallery.map((image, i) => ({ key: `image-${i}`, image }))
-    : fallbackSlides;
-
 export default function ProductGallery() {
+  const { product } = useCart();
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
+
+  const slides: Slide[] = useMemo(
+    () =>
+      product.images.length > 0
+        ? product.images.map((image, i) => ({ key: `image-${i}`, image }))
+        : fallbackSlides,
+    [product.images],
+  );
 
   const onScroll = useCallback(() => {
     const track = trackRef.current;
     if (!track) return;
     const index = Math.round(track.scrollLeft / track.clientWidth);
     setActive(Math.max(0, Math.min(slides.length - 1, index)));
-  }, []);
+  }, [slides.length]);
 
   useEffect(() => {
     const track = trackRef.current;
@@ -62,7 +66,7 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            className="relative aspect-square max-h-[37svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-linen sm:aspect-[4/5] sm:max-h-none"
+            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-linen sm:aspect-[4/5] sm:max-h-none"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >

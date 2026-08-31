@@ -1,11 +1,14 @@
+import Countdown from "@/components/Countdown";
 import FinalCta from "@/components/FinalCta";
 import Reveal from "@/components/Reveal";
 import { DiamondIcon, ShieldIcon, Stars } from "@/components/Icons";
 import { displayedReviews } from "@/data/reviews";
-import { defaultVariant, formatPrice, product, savingsPercent } from "@/data/product";
+import { formatPrice, savingsPercent } from "@/data/product";
+import { defaultVariantOf, type ResolvedProduct } from "@/lib/product-source";
 
-export default function SocialProof() {
+export default function SocialProof({ product }: { product: ResolvedProduct }) {
   const { items, isPlaceholder } = displayedReviews();
+  const defaultVariant = defaultVariantOf(product);
   const savings = savingsPercent(defaultVariant);
 
   return (
@@ -91,7 +94,9 @@ export default function SocialProof() {
               )}
             </div>
 
-            <div className="mt-8 flex justify-center">
+            <Countdown className="mt-7" />
+
+            <div className="mt-7 flex justify-center">
               <FinalCta />
             </div>
 

@@ -117,6 +117,11 @@
     padding-bottom: calc(var(--safe-bottom) + 0.75rem);
   }
 
+  /* Lining, uniform-width digits — oldstyle figures misread in a countdown. */
+  .lining-nums {
+    font-variant-numeric: lining-nums tabular-nums;
+  }
+
   .no-scrollbar::-webkit-scrollbar {
     display: none;
   }

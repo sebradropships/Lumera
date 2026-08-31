@@ -2,10 +2,9 @@
 
 import { useCart } from "@/lib/cart";
 import { ArrowIcon } from "@/components/Icons";
-import { defaultVariant, product } from "@/data/product";
 
 export default function FinalCta() {
-  const { addToCart, openCart } = useCart();
+  const { product, defaultVariant, addToCart, openCart } = useCart();
 
   return (
     <button

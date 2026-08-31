@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useCart } from "@/lib/cart";
+import Countdown from "@/components/Countdown";
 import QuantityStepper from "@/components/QuantityStepper";
 import {
   ArrowIcon,
@@ -13,18 +14,19 @@ import {
   Stars,
   TruckIcon,
 } from "@/components/Icons";
-import { defaultVariant, formatPrice, product, savingsPercent } from "@/data/product";
+import { formatPrice, savingsPercent } from "@/data/product";
 
 const icons = { drop: DropIcon, leaf: LeafIcon, sparkle: SparkleIcon };
-const hasVariants = product.variants.length > 1;
 
 export default function PurchasePanel() {
-  const { addToCart, openCart, buyNow, isCheckingOut } = useCart();
+  const { product, defaultVariant, variantById, addToCart, openCart, buyNow, isCheckingOut } =
+    useCart();
   const [variantId, setVariantId] = useState(defaultVariant.id);
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 
-  const variant = product.variants.find((v) => v.id === variantId) ?? defaultVariant;
+  const hasVariants = product.variants.length > 1;
+  const variant = variantById(variantId);
   const savings = savingsPercent(variant);
 
   const handleAdd = () => {
@@ -85,6 +87,8 @@ export default function PurchasePanel() {
             </span>
           )}
         </div>
+
+        <Countdown className="mt-3.5 border-t border-sand/50 pt-3.5" />
 
         {hasVariants && (
           <fieldset className="mt-5 sm:mt-6">

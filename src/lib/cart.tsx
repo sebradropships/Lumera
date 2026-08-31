@@ -8,7 +8,8 @@ import {
   useMemo,
   useState,
 } from "react";
-import { defaultVariant, product, type ProductVariant } from "@/data/product";
+import type { ProductVariant } from "@/data/product";
+import type { ResolvedProduct } from "@/lib/product-source";
 import { cartPermalink, SHOPIFY_DOMAIN } from "@/lib/shopify";
 
 export type CartLine = {
@@ -17,6 +18,10 @@ export type CartLine = {
 };
 
 type CartState = {
+  /** Live product when Shopify is connected, local defaults otherwise. */
+  product: ResolvedProduct;
+  defaultVariant: ProductVariant;
+  variantById: (id: string) => ProductVariant;
   lines: CartLine[];
   isOpen: boolean;
   isCheckingOut: boolean;
@@ -38,11 +43,11 @@ const CartContext = createContext<CartState | null>(null);
 
 const STORAGE_KEY = "lumera.cart.v1";
 
-export function variantById(id: string): ProductVariant {
-  return product.variants.find((v) => v.id === id) ?? defaultVariant;
-}
-
-function readStoredLines(): CartLine[] {
+/**
+ * Stored lines are dropped when they no longer match a live variant — a price
+ * change or a renamed SKU must never resurrect a stale cart line.
+ */
+function readStoredLines(variants: ProductVariant[]): CartLine[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
@@ -50,21 +55,37 @@ function readStoredLines(): CartLine[] {
     const parsed = JSON.parse(raw) as CartLine[];
     if (!Array.isArray(parsed)) return [];
     return parsed
-      .filter((l) => product.variants.some((v) => v.id === l.variantId))
+      .filter((l) => variants.some((v) => v.id === l.variantId))
       .map((l) => ({ variantId: l.variantId, quantity: Math.max(1, Math.min(99, l.quantity)) }));
   } catch {
     return [];
   }
 }
 
-export function CartProvider({ children }: { children: React.ReactNode }) {
+export function CartProvider({
+  product,
+  children,
+}: {
+  product: ResolvedProduct;
+  children: React.ReactNode;
+}) {
   const [lines, setLines] = useState<CartLine[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState<string | null>(null);
 
+  const defaultVariant = useMemo(
+    () => product.variants.find((v) => v.default) ?? product.variants[0],
+    [product.variants],
+  );
+
+  const variantById = useCallback(
+    (id: string) => product.variants.find((v) => v.id === id) ?? defaultVariant,
+    [product.variants, defaultVariant],
+  );
+
   // Hydrate from localStorage after mount so server and client markup match.
-  useEffect(() => setLines(readStoredLines()), []);
+  useEffect(() => setLines(readStoredLines(product.variants)), [product.variants]);
 
   useEffect(() => {
     try {
@@ -127,7 +148,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       },
       { subtotal: 0, compareAtSubtotal: 0, itemCount: 0 },
     );
-  }, [lines]);
+  }, [lines, variantById]);
 
   /** Resolves a Shopify checkout URL for the given lines, or null. */
   const resolveCheckoutUrl = useCallback(async (target: CartLine[]) => {
@@ -157,7 +178,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
     // 2. Cart permalink.
     return cartPermalink(payload);
-  }, []);
+  }, [variantById]);
 
   const startCheckout = useCallback(
     async (target: CartLine[]) => {
@@ -195,6 +216,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const value = useMemo<CartState>(
     () => ({
+      product,
+      defaultVariant,
+      variantById,
       lines,
       isOpen,
       isCheckingOut,
@@ -211,6 +235,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       buyNow,
     }),
     [
+      product,
+      defaultVariant,
+      variantById,
       lines,
       isOpen,
       isCheckingOut,

@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { ArrowIcon } from "@/components/Icons";
-import { defaultVariant, formatPrice, product, savingsPercent } from "@/data/product";
+import { formatPrice, savingsPercent } from "@/data/product";
 
 /**
  * Mobile purchase bar. Appears once the visitor has scrolled and the hero CTA
@@ -11,7 +11,7 @@ import { defaultVariant, formatPrice, product, savingsPercent } from "@/data/pro
  * on top of the checkout. Bottom padding respects the iPhone safe area.
  */
 export default function StickyBar() {
-  const { addToCart, openCart, isOpen } = useCart();
+  const { product, defaultVariant, addToCart, openCart, isOpen } = useCart();
   const [visible, setVisible] = useState(false);
   const savings = savingsPercent(defaultVariant);
 

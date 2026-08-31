@@ -5,14 +5,13 @@ import ProductArt from "@/components/ProductArt";
 import Image from "next/image";
 import QuantityStepper from "@/components/QuantityStepper";
 import { ArrowIcon, CloseIcon, ShieldIcon } from "@/components/Icons";
-import { formatPrice, product } from "@/data/product";
-import { gallery } from "@/data/media";
-import { useCart, variantById } from "@/lib/cart";
-
-const thumb = gallery[0] ?? null;
+import { formatPrice } from "@/data/product";
+import { useCart } from "@/lib/cart";
 
 export default function CartDrawer() {
   const {
+    product,
+    variantById,
     lines,
     isOpen,
     closeCart,
@@ -25,6 +24,8 @@ export default function CartDrawer() {
     isCheckingOut,
     checkoutError,
   } = useCart();
+
+  const thumb = product.images[0] ?? null;
 
   const panelRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
