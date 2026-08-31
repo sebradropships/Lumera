@@ -21,7 +21,7 @@ export default async function Page() {
         <Hero />
 
         {/* 2 — Why Lumera: experience + how it works */}
-        <Experience />
+        <Experience product={product} />
 
         {/* 3 — Social proof + final CTA */}
         <SocialProof product={product} />

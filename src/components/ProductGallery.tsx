@@ -66,7 +66,12 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal sm:aspect-[4/5] sm:max-h-none"
+            // Square frame end to end: the store's photography is 1600x1600,
+            // and a 4:5 frame would have cover-cropped a fifth of every shot
+            // off the top and bottom. Matching the source means no crop at all
+            // on desktop. Mobile still caps the height to keep the price above
+            // the fold, which costs a small symmetric crop.
+            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal sm:max-h-none"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >
@@ -75,8 +80,10 @@ export default function ProductGallery() {
                 src={slide.image.src}
                 alt={slide.image.alt}
                 fill
-                sizes="(min-width: 1024px) 560px, 100vw"
+                sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw"
+                quality={92}
                 priority={i === 0}
+                fetchPriority={i === 0 ? "high" : undefined}
                 loading={i === 0 ? "eager" : "lazy"}
                 className="object-cover"
               />

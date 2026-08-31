@@ -1,17 +1,23 @@
 /**
  * ── PRODUCT IMAGERY ──────────────────────────────────────────────────────────
  *
- * No product photography has been supplied yet, so the gallery renders the
- * built-in Lumera art panels (hand-drawn SVG, not stock photos or AI-generated
- * "product shots" that would misrepresent the real product).
+ * Every image slot resolves in the same order:
  *
- * TO USE REAL PHOTOGRAPHY:
+ *     1. an override listed here
+ *     2. the connected store's own photography
+ *     3. the built-in SVG art panels
+ *
+ * So LEAVE THESE EMPTY in the normal case — the store is the source, and
+ * changing a photo in Shopify changes the site. Fill one only to override the
+ * store for a particular slot, such as a shoot that never went into Shopify.
+ *
+ * TO OVERRIDE:
  *   • Drop files into `public/product/` and reference them as `/product/x.jpg`, or
  *   • paste Shopify CDN URLs (`https://cdn.shopify.com/...`, already allow-listed
  *     in next.config.ts).
  *
- * Fill `gallery` below and the SVG panels are replaced automatically. Shoot or
- * export at 1200×1500 (4:5) for the gallery; anything else is cover-cropped.
+ * The gallery frame is square, matching typical Shopify product exports, so a
+ * 1:1 image is shown uncropped. Anything else is cover-cropped to fit.
  */
 
 export type ProductImage = {
@@ -22,11 +28,12 @@ export type ProductImage = {
   height?: number;
 };
 
-/** Hero gallery. Empty → the SVG art panels are used. */
+/** Hero gallery. Empty → the store's photography, then the SVG panels. */
 export const gallery: ProductImage[] = [];
 
-/** Optional close-up used by the "How it works" strip. Empty → SVG art. */
+/** "How it works" strip. Empty → a later frame from the store's photos. */
 export const ritualImage: ProductImage | null = null;
 
-/** Optional images for the three benefit cards, in order. Empty → SVG art. */
+/** The three benefit cards, in order. Empty → the store's photos, offset
+ * past the hero frame so the cards are not a repeat of it. */
 export const benefitImages: ProductImage[] = [];

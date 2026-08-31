@@ -132,6 +132,7 @@ export default function CartDrawer() {
                           alt={thumb.alt}
                           fill
                           sizes="70px"
+                          quality={92}
                           className="object-cover"
                         />
                       ) : (

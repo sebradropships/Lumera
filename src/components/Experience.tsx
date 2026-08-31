@@ -2,7 +2,8 @@ import Image from "next/image";
 import ProductArt from "@/components/ProductArt";
 import Reveal from "@/components/Reveal";
 import { DiamondIcon } from "@/components/Icons";
-import { benefitImages, ritualImage } from "@/data/media";
+import { benefitImages, ritualImage, type ProductImage } from "@/data/media";
+import type { ResolvedProduct } from "@/lib/product-source";
 
 const cards = [
   {
@@ -35,7 +36,28 @@ const steps = [
   },
 ];
 
-export default function Experience() {
+/**
+ * Which photo a slot gets: an explicit override from media.ts first, otherwise
+ * the store's own photography, otherwise the built-in SVG art.
+ *
+ * The offset skips the hero frame so the cards aren't three repeats of the
+ * image already filling the top of the page, and wraps so a store with only
+ * one or two photos still fills every slot.
+ */
+function pickPhoto(
+  overrides: ProductImage[],
+  index: number,
+  photos: ProductImage[],
+  offset = 1,
+): ProductImage | null {
+  return overrides[index] ?? photos[(index + offset) % photos.length] ?? null;
+}
+
+export default function Experience({ product }: { product: ResolvedProduct }) {
+  const photos = product.images;
+  const ritual =
+    ritualImage ?? (photos.length > 0 ? photos[photos.length > 4 ? 4 : 0] : null);
+
   return (
     <section
       aria-labelledby="experience-heading"
@@ -58,7 +80,7 @@ export default function Experience() {
         {/* Benefit cards */}
         <ul className="mt-11 grid gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-14 lg:gap-7">
           {cards.map((card, i) => {
-            const image = benefitImages[i];
+            const image = pickPhoto(benefitImages, i, photos);
             return (
               <Reveal as="li" key={card.number} delay={i * 90} className="h-full">
                 <article className="group h-full overflow-hidden rounded-xl2 border border-white/70 bg-white/65 shadow-soft backdrop-blur-[2px] transition-all duration-500 ease-silk hover:-translate-y-1 hover:shadow-lift">
@@ -68,7 +90,8 @@ export default function Experience() {
                         src={image.src}
                         alt={image.alt}
                         fill
-                        sizes="(min-width: 640px) 33vw, 100vw"
+                        sizes="(min-width: 1024px) 380px, (min-width: 640px) 33vw, 100vw"
+                        quality={92}
                         loading="lazy"
                         className="object-cover transition-transform duration-700 ease-silk group-hover:scale-[1.04]"
                       />
@@ -99,12 +122,13 @@ export default function Experience() {
         <Reveal className="mt-14 lg:mt-20">
           <div className="overflow-hidden rounded-xl3 border border-white/70 bg-white/70 shadow-soft backdrop-blur-sm md:grid md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-stretch">
             <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[280px]">
-              {ritualImage ? (
+              {ritual ? (
                 <Image
-                  src={ritualImage.src}
-                  alt={ritualImage.alt}
+                  src={ritual.src}
+                  alt={ritual.alt}
                   fill
-                  sizes="(min-width: 768px) 40vw, 100vw"
+                  sizes="(min-width: 1024px) 480px, (min-width: 768px) 40vw, 100vw"
+                  quality={92}
                   loading="lazy"
                   className="object-cover"
                 />
