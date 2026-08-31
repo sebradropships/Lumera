@@ -23,27 +23,32 @@
  */
 
 export const offer = {
-  /** Top announcement strip. Set `enabled: false` to hide it. */
+  /**
+   * Top sale strip — a marquee that loops forever above the header.
+   * Set `enabled: false` to hide it.
+   */
   strip: {
     enabled: true,
-    /**
-     * Shown first, with {n} replaced by the real saving. It is dropped entirely
-     * when the live product has no compare-at price, so the strip can never
-     * advertise a discount that does not exist.
-     */
-    discountMessage: "Limited offer — {n}% off",
 
     /**
-     * Always-on messages. Keep each under ~32 characters or it truncates on a
-     * 390px phone. Only claim shipping, returns or guarantees that your actual
-     * store policy backs up.
+     * The repeating sequence. Rendered twice so the loop has no visible seam,
+     * so keep it short; every item is separated by a diamond.
      */
-    messages: [
-      "Fast US delivery",
-      "Secure checkout",
-    ] as string[],
-    /** Seconds each message holds before the next fades in. */
-    rotateSeconds: 4.5,
+    items: ["SALE", "SALE", "SALE"] as string[],
+
+    /**
+     * Appended to the sequence with {n} replaced by the real saving. Dropped
+     * entirely when the live product has no compare-at price, so the strip can
+     * never advertise a discount that does not exist.
+     */
+    discountMessage: "{n}% OFF TODAY",
+
+    /**
+     * Seconds for one full pass. Higher is slower. Motion this persistent has
+     * to be escapable, so it pauses on hover and on keyboard focus, and holds
+     * still entirely under prefers-reduced-motion.
+     */
+    loopSeconds: 22,
   },
 
   /**
