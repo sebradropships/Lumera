@@ -30,7 +30,7 @@ export default async function Page() {
 
       <footer className="border-t border-rosedust/50 px-5 pb-28 pt-8 text-center sm:pb-12 lg:pb-12">
         <p className="font-serif text-[13px] uppercase tracking-brand text-ink">
-          <Wordmark className="inline-block h-9 w-auto" />
+          <Wordmark id="mark-footer" className="inline-block h-10 w-auto" />
         </p>
         <p className="mx-auto mt-3 max-w-[42ch] text-[11px] leading-relaxed text-muted">
           Hoygi is a cosmetic skincare product, not a medical treatment. Results and appearance

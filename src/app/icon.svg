@@ -1,11 +1,28 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#FFFAFC"/>
       <stop offset="100%" stop-color="#F9D6E1"/>
     </linearGradient>
+    <linearGradient id="gel" x1="0" y1="0" x2="0.25" y2="1">
+      <stop offset="0%" stop-color="#F5BFD2"/>
+      <stop offset="45%" stop-color="#E89DBB"/>
+      <stop offset="100%" stop-color="#D2789C"/>
+    </linearGradient>
+    <filter id="gloss" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="1.6" result="bump"/>
+      <feSpecularLighting in="bump" surfaceScale="4" specularConstant="1.4"
+                          specularExponent="22" lighting-color="#FFFFFF" result="spec">
+        <fePointLight x="18" y="-8" z="46"/>
+      </feSpecularLighting>
+      <feComposite in="spec" in2="SourceAlpha" operator="in" result="clip"/>
+      <feComposite in="SourceGraphic" in2="clip" operator="arithmetic" k1="0" k2="1" k3="1.1" k4="0"/>
+    </filter>
   </defs>
-  <rect width="64" height="64" rx="14" fill="url(#g)"/>
-  <text x="32" y="44" text-anchor="middle" font-family="Gilroy, Outfit, system-ui, sans-serif"
-        font-size="34" font-weight="600" fill="#C2456B">H</text>
+  <rect width="64" height="64" rx="14" fill="url(#bg)"/>
+  <g filter="url(#gloss)" fill="url(#gel)">
+    <rect x="15" y="15" width="10" height="34" rx="5"/>
+    <rect x="39" y="15" width="10" height="34" rx="5"/>
+    <rect x="15" y="27" width="34" height="10" rx="5"/>
+  </g>
 </svg>
