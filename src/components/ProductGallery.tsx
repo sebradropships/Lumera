@@ -71,13 +71,13 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            // The frame bounds the image; it does not reshape it. Sizing the
-            // photo as a replaced element with max-h/max-w and auto dimensions
-            // makes it settle at its own aspect ratio inside those bounds, so a
-            // 3:4 shot and a 5:4 panel both arrive whole. Cover-cropping to a
-            // fixed square previously cut a fifth off the tall ones and two of
-            // five ingredient cards off the wide one.
-            className="relative flex aspect-square max-h-[33svh] w-full shrink-0 snap-center items-center justify-center sm:max-h-none"
+            // One frame size for every slide, with the image contained inside
+            // it. Cover would crop to fill and contain alone would leave each
+            // slide a different width, so the card is the constant and the
+            // photo sits within it — same box each time, nothing cut. The
+            // height cap keeps the price above the fold on a 390x844 screen;
+            // raising it further pushes the price under.
+            className="relative aspect-square max-h-[36svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal shadow-soft ring-1 ring-inset ring-white/55 sm:max-h-none"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >
@@ -85,8 +85,7 @@ export default function ProductGallery() {
               <Image
                 src={slide.image.src}
                 alt={slide.image.alt}
-                width={slide.image.width ?? 1600}
-                height={slide.image.height ?? 1600}
+                fill
                 sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw"
                 quality={92}
                 priority={i === 0}
@@ -95,9 +94,7 @@ export default function ProductGallery() {
                 // The hairline replaces PhotoFrame here: a vignette overlay
                 // would have covered the whole bounding box, haloing the empty
                 // space beside an image that no longer fills it.
-                className={photoClassName(
-                  "h-auto max-h-full w-auto max-w-full rounded-xl3 object-contain shadow-soft ring-1 ring-inset ring-white/55",
-                )}
+                className={photoClassName("object-contain")}
               />
             ) : (
               <ProductArt variant={slide.art} className="h-full w-full rounded-xl3" />
