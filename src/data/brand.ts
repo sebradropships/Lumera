@@ -27,5 +27,14 @@ export type BrandLogo = {
   blend: "multiply" | "none";
 };
 
-/** null → the type-set wordmark. Set this once the logo file is in `public/`. */
-export const logo: BrandLogo | null = null;
+/**
+ * Trimmed to the mark's own bounding box — the supplied export carried uneven
+ * padding (76/112/48/71) that would have read as an off-centre logo. Its
+ * background is genuinely transparent, so no blend is needed.
+ */
+export const logo: BrandLogo | null = {
+  src: "/logo-hoygi.png",
+  width: 901,
+  height: 336,
+  blend: "none",
+};
