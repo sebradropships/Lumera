@@ -86,8 +86,12 @@ export const benefitImages: (ProductImage | null)[] = [
     width: 796,
     height: 995,
   },
-  // 02 has no photograph yet, so it keeps the drawn art panel.
-  null,
+  {
+    src: "/benefit-smooth.jpg",
+    alt: "Close-up of smooth, glossy skin with a hand resting against the cheek",
+    width: 736,
+    height: 920,
+  },
   {
     src: "/benefit-radiance.jpg",
     alt: "Close-up of a cheek with a dewy highlight",
