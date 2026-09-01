@@ -39,7 +39,7 @@ export const product = {
   title: "Hoygi Bio-Collagen Gel Face Mask",
   shortTitle: "Bio-Collagen Gel Mask",
   eyebrow: "THE GLOW RITUAL",
-  headline: "Your Skin's 20-Minute Glow Reset.",
+  headline: "Your Skin's 40-Minute Glow Reset.",
   subhead:
     "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant.",
   currency: "USD",

@@ -174,7 +174,7 @@ function Ritual({ id }: { id: string }) {
       <ellipse cx="170" cy="216" rx="19" ry="10" fill="#F2CEDC" opacity="0.9" />
       <ellipse cx="230" cy="216" rx="19" ry="10" fill="#F2CEDC" opacity="0.9" />
       <path d="M180 300c12-8 28-8 40 0-12 10-28 10-40 0Z" fill="#F2CEDC" opacity="0.9" />
-      {/* 20-minute ritual marker */}
+      {/* 40-minute ritual marker */}
       <circle cx="288" cy="150" r="26" fill="#FFFFFF" opacity="0.7" />
       <circle cx="288" cy="150" r="26" fill="none" stroke={`url(#${id}-pink)`} strokeWidth="1.4" />
       <path

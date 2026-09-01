@@ -19,7 +19,7 @@ const sans = Outfit({
 });
 
 const description =
-  "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 20-minute glow ritual.";
+  "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 40-minute glow ritual.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -42,13 +42,13 @@ export const metadata: Metadata = {
     type: "website",
     url: siteUrl,
     siteName: "Hoygi",
-    title: "Hoygi — Your Skin's 20-Minute Glow Reset",
+    title: "Hoygi — Your Skin's 40-Minute Glow Reset",
     description,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hoygi — Your Skin's 20-Minute Glow Reset",
+    title: "Hoygi — Your Skin's 40-Minute Glow Reset",
     description,
   },
   robots: { index: true, follow: true },

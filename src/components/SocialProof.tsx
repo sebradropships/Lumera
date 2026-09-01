@@ -78,7 +78,7 @@ export default function SocialProof({ product }: { product: ResolvedProduct }) {
             </h2>
 
             <p className="mx-auto mt-4 max-w-[38ch] text-[15px] leading-[1.65] text-plum sm:text-[16px]">
-              Give your skin 20 minutes of hydration, softness and radiance.
+              Give your skin 40 minutes of hydration, softness and radiance.
             </p>
 
             {savings && (

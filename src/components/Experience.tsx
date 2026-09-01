@@ -33,7 +33,7 @@ const steps = [
   {
     number: "02",
     title: "Relax",
-    copy: "Leave on according to the product instructions.",
+    copy: "Leave on for 40 minutes so the essence fully absorbs.",
   },
   {
     number: "03",
@@ -71,7 +71,7 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
             Your Skin, But More Radiant.
           </h2>
           <p className="mt-4 text-[15px] leading-[1.65] text-plum sm:text-[16px]">
-            Turn your skincare routine into a 20-minute glow ritual.
+            Turn your skincare routine into a 40-minute glow ritual.
           </p>
         </Reveal>
 
