@@ -5,6 +5,7 @@ import Reveal from "@/components/Reveal";
 import { DiamondIcon } from "@/components/Icons";
 import { benefitImages, ritualImage, type ProductImage } from "@/data/media";
 import { imageSlots } from "@/lib/image-slots";
+import RitualVideo from "@/components/RitualVideo";
 import type { ResolvedProduct } from "@/lib/product-source";
 
 const cards = [
@@ -124,8 +125,20 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
         {/* How it works — compact */}
         <Reveal className="mt-14 lg:mt-20">
           <div className="overflow-hidden rounded-xl3 border border-white/70 bg-white/70 shadow-soft backdrop-blur-sm md:grid md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] md:items-stretch">
-            <div className="relative aspect-[16/10] md:aspect-auto md:min-h-[280px]">
-              {ritual ? (
+            <div
+              className={
+                product.video
+                  ? // Phone footage is portrait; a 16/10 frame would crop it to a slit.
+                    "relative aspect-[4/5] md:aspect-auto md:min-h-[440px]"
+                  : "relative aspect-[16/10] md:aspect-auto md:min-h-[280px]"
+              }
+            >
+              {product.video ? (
+                <>
+                  <RitualVideo video={product.video} />
+                  <PhotoFrame subtle />
+                </>
+              ) : ritual ? (
                 <>
                   <Image
                     src={ritual.src}

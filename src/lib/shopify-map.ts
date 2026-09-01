@@ -1,4 +1,4 @@
-import type { ProductImage } from "@/data/media";
+import type { ProductImage, ProductVideo } from "@/data/media";
 import type { ProductVariant } from "@/data/product";
 
 /**
@@ -16,12 +16,25 @@ export type AdminImage = {
   height: number | null;
 };
 
+export type AdminVideoSource = {
+  url: string;
+  mimeType: string | null;
+  width: number | null;
+  height: number | null;
+};
+
+export type AdminVideo = {
+  alt?: string | null;
+  sources?: AdminVideoSource[] | null;
+  preview?: { image?: { url: string; width: number | null; height: number | null } | null } | null;
+};
+
 export type AdminProductNode = {
   id: string;
   title: string;
   handle: string;
   description: string | null;
-  media: { edges: { node: { image?: AdminImage | null } }[] };
+  media: { edges: { node: ({ image?: AdminImage | null } & AdminVideo) }[] };
   variants: {
     edges: {
       node: {
@@ -41,6 +54,8 @@ export type LiveProduct = {
   handle: string;
   description: string | null;
   images: ProductImage[];
+  /** First video in the product's media, if the store has one. */
+  video: ProductVideo | null;
   variants: ProductVariant[];
 };
 
@@ -95,6 +110,23 @@ export function mapProduct(
     height: image.height ?? undefined,
   }));
 
+  // Prefer an explicit mp4: Shopify also returns HLS (.m3u8) manifests, which a
+  // bare <video> cannot play without a JS player.
+  const videoNode = node.media.edges.map((e) => e.node).find((n) => (n.sources?.length ?? 0) > 0);
+  const sources = videoNode?.sources ?? [];
+  const best =
+    sources.filter((v) => v.mimeType === "video/mp4").sort((a, b) => (b.width ?? 0) - (a.width ?? 0))[0] ??
+    sources[0];
+  const video: ProductVideo | null = best
+    ? {
+        src: best.url,
+        poster: videoNode?.preview?.image?.url,
+        alt: usableAltText(videoNode?.alt) ?? `${brandTitle} in use`,
+        width: best.width ?? undefined,
+        height: best.height ?? undefined,
+      }
+    : null;
+
   const sellable = node.variants.edges.filter((edge) => edge.node.availableForSale);
   const singleVariant = sellable.length === 1;
 
@@ -133,6 +165,7 @@ export function mapProduct(
       handle: node.handle,
       description: node.description,
       images,
+      video,
       variants,
     },
   };

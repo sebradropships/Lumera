@@ -1,5 +1,10 @@
 import { cache } from "react";
-import { gallery as localGallery, type ProductImage } from "@/data/media";
+import {
+  gallery as localGallery,
+  ritualVideo as localRitualVideo,
+  type ProductImage,
+  type ProductVideo,
+} from "@/data/media";
 import { product as localProduct, type ProductVariant } from "@/data/product";
 import { fetchLiveProduct } from "@/lib/shopify-admin";
 import { storefrontConfigured } from "@/lib/shopify";
@@ -27,6 +32,8 @@ export type ResolvedProduct = {
   currency: string;
   variants: ProductVariant[];
   images: ProductImage[];
+  /** Clip for the ritual panel: local override, else the store's own video. */
+  video: ProductVideo | null;
   benefits: typeof localProduct.benefits;
   offer: typeof localProduct.offer;
   /** True when prices and photography came from the live store. */
@@ -61,6 +68,7 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
       ...base,
       variants: [...localProduct.variants],
       images: localGallery,
+      video: localRitualVideo,
       isLive: false,
     };
   }
@@ -76,6 +84,7 @@ export const getProduct = cache(async (): Promise<ResolvedProduct> => {
     variants: live.variants,
     // Local photography, when present, still wins — it's the deliberate choice.
     images: localGallery.length > 0 ? localGallery : live.images,
+    video: localRitualVideo ?? live.video,
     isLive: true,
   };
 });

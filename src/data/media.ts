@@ -42,6 +42,35 @@ export type ProductImage = {
   height?: number;
 };
 
+export type ProductVideo = {
+  /** H.264 MP4. Safari plays HEVC, Chrome and Firefox largely do not. */
+  src: string;
+  /** Still shown before playback and while the file loads. */
+  poster?: string;
+  /** Describe what happens in the clip — silent decoration needs no caption. */
+  alt: string;
+  width?: number;
+  height?: number;
+};
+
+/**
+ * Clip for the "how it works" panel. Empty → the store's own video, then the
+ * ritual photo.
+ *
+ * PREFER UPLOADING TO SHOPIFY (product → Media → Add video). Shopify transcodes
+ * to several resolutions and serves from its CDN, and the page picks it up with
+ * no deploy. A file in public/ is committed to git forever, ships whole to every
+ * visitor at one size, and GitHub refuses anything over 100MB — phone footage
+ * reaches that quickly.
+ */
+export const ritualVideo: ProductVideo | null = {
+  src: "/ritual.mp4",
+  poster: "/ritual-poster.jpg",
+  alt: "The mask being applied and smoothed over the face",
+  width: 720,
+  height: 1280,
+};
+
 /** Hero gallery. Empty → the store's photography, then the SVG panels. */
 export const gallery: ProductImage[] = [];
 

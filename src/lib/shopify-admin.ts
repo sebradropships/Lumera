@@ -126,6 +126,22 @@ const PRODUCT_QUERY = /* GraphQL */ `
                     height
                   }
                 }
+                ... on Video {
+                  alt
+                  sources {
+                    url
+                    mimeType
+                    width
+                    height
+                  }
+                  preview {
+                    image {
+                      url
+                      width
+                      height
+                    }
+                  }
+                }
               }
             }
           }
