@@ -79,4 +79,19 @@ export const ritualImage: ProductImage | null = null;
 
 /** The three benefit cards, in order. Empty → the store's photos, offset
  * past the hero frame so the cards are not a repeat of it. */
-export const benefitImages: ProductImage[] = [];
+export const benefitImages: (ProductImage | null)[] = [
+  {
+    src: "/benefit-hydration.jpg",
+    alt: "Close-up of hydrated skin with a focus bracket over the cheek",
+    width: 796,
+    height: 995,
+  },
+  // 02 has no photograph yet, so it keeps the drawn art panel.
+  null,
+  {
+    src: "/benefit-radiance.jpg",
+    alt: "Close-up of a cheek with a dewy highlight",
+    width: 1000,
+    height: 1250,
+  },
+];

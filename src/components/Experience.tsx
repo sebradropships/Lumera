@@ -83,7 +83,7 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
             return (
               <Reveal as="li" key={card.number} delay={i * 90} className="h-full">
                 <article className="group h-full overflow-hidden rounded-xl2 border border-white/70 bg-white/65 shadow-soft backdrop-blur-[2px] transition-all duration-500 ease-silk hover:-translate-y-1 hover:shadow-lift">
-                  <div className="relative aspect-[4/3] overflow-hidden">
+                  <div className="relative aspect-[4/5] overflow-hidden">
                     {image ? (
                       <>
                         <Image
