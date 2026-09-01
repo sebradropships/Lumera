@@ -37,7 +37,7 @@ export default function PurchasePanel() {
   };
 
   return (
-    <div className="mt-6 sm:mt-10">
+    <div className="mt-4 sm:mt-10">
       <p className="eyebrow">{product.eyebrow}</p>
 
       <h1 className="display mt-2.5 text-[33px] sm:text-[46px] lg:text-[54px]">
@@ -49,7 +49,7 @@ export default function PurchasePanel() {
       </p>
 
       {/* Benefit micro-row */}
-      <ul className="mt-5 grid grid-cols-3 gap-2 border-y border-rosedust/60 py-3.5 sm:mt-7 sm:py-5">
+      <ul className="mt-4 grid grid-cols-3 gap-2 border-y border-rosedust/60 py-3 sm:mt-7 sm:py-5">
         {product.benefits.map((benefit) => {
           const Icon = icons[benefit.icon];
           return (
@@ -66,7 +66,7 @@ export default function PurchasePanel() {
       </ul>
 
       {/* Offer */}
-      <div className="mt-5 rounded-xl2 border border-white/70 bg-white/70 p-5 shadow-soft backdrop-blur-sm sm:mt-7 sm:p-6">
+      <div className="mt-4 rounded-xl2 border border-white/70 bg-white/70 p-5 shadow-soft backdrop-blur-sm sm:mt-7 sm:p-6">
         <div className="flex items-center gap-2">
           <DiamondIcon className="h-2.5 w-2.5 text-pink" />
           <p className="text-[10px] font-semibold uppercase tracking-eyebrow text-pink sm:text-[10.5px]">

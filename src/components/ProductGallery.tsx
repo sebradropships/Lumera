@@ -71,13 +71,12 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            // One frame size for every slide, with the image contained inside
-            // it. Cover would crop to fill and contain alone would leave each
-            // slide a different width, so the card is the constant and the
-            // photo sits within it — same box each time, nothing cut. The
-            // height cap keeps the price above the fold on a 390x844 screen;
-            // raising it further pushes the price under.
-            className="relative aspect-square max-h-[36svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal shadow-soft ring-1 ring-inset ring-white/55 sm:max-h-none"
+            // Every source is square, so the frame is square too and the photo
+            // fills it edge to edge — no bands, and the card never overhangs the
+            // image. aspect-square with a max-height was the bug: the cap made
+            // the box 350x304, so even a square photo sat in it with 23px of
+            // background either side.
+            className="relative aspect-square w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal shadow-soft ring-1 ring-inset ring-white/55"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >
@@ -94,7 +93,7 @@ export default function ProductGallery() {
                 // The hairline replaces PhotoFrame here: a vignette overlay
                 // would have covered the whole bounding box, haloing the empty
                 // space beside an image that no longer fills it.
-                className={photoClassName("object-contain")}
+                className={photoClassName("object-cover")}
               />
             ) : (
               <ProductArt variant={slide.art} className="h-full w-full rounded-xl3" />
