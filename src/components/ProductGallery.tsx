@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductArt from "@/components/ProductArt";
 import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
-import type { ProductImage } from "@/data/media";
+import { gallery as localGallery, type ProductImage } from "@/data/media";
 import { useCart } from "@/lib/cart";
 import { imageSlots } from "@/lib/image-slots";
 
@@ -26,7 +26,7 @@ export default function ProductGallery() {
   const [active, setActive] = useState(0);
 
   const slides: Slide[] = useMemo(() => {
-    const hero = imageSlots(product.images).gallery;
+    const hero = localGallery.length > 0 ? localGallery : imageSlots(product.images).gallery;
     return hero.length > 0
       ? hero.map((image, i) => ({ key: `image-${i}`, image }))
       : fallbackSlides;
