@@ -1,6 +1,6 @@
 import Reveal from "@/components/Reveal";
-import { ShieldIcon, Stars } from "@/components/Icons";
-import { displayedReviews } from "@/data/reviews";
+import ReviewList from "@/components/ReviewList";
+import { displayedReviews, reviewSummary } from "@/data/reviews";
 
 /**
  * Customer reviews, as their own section between the ritual and the final offer.
@@ -13,6 +13,7 @@ import { displayedReviews } from "@/data/reviews";
  */
 export default function Reviews() {
   const { items, isPlaceholder } = displayedReviews();
+  const summary = reviewSummary();
 
   return (
     <section aria-labelledby="reviews-heading" className="pb-0 pt-16 sm:pt-20 lg:pt-28">
@@ -25,6 +26,19 @@ export default function Reviews() {
           >
             The Glow Everyone Wants.
           </h2>
+
+          {/* Figures only — a five-star graphic beside a 4.6 average would
+              overstate it, and rounding the glyphs hides the very difference
+              the number exists to show. */}
+          {summary && (
+            <div className="mt-5 flex flex-col items-center gap-2">
+              <p className="text-[13px] text-plum">
+                <span className="font-semibold text-ink">{summary.average.toFixed(1)}</span> out of
+                5{" · "}
+                {summary.count} {summary.count === 1 ? "review" : "reviews"}
+              </p>
+            </div>
+          )}
         </Reveal>
 
         {items.length > 0 ? (
@@ -38,32 +52,7 @@ export default function Reviews() {
               </Reveal>
             )}
 
-            <ul className="mt-8 grid gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-12">
-              {items.map((review, i) => (
-                <Reveal as="li" key={review.id} delay={i * 90} className="h-full">
-                  <figure className="relative flex h-full flex-col rounded-xl2 border border-white/70 bg-white/70 p-6 shadow-soft backdrop-blur-[2px] sm:p-7">
-                    {isPlaceholder && (
-                      <span className="absolute right-4 top-4 rounded-full border border-pinksoft px-2 py-[3px] text-[9.5px] font-semibold uppercase tracking-wide2 text-pink">
-                        Sample
-                      </span>
-                    )}
-                    <Stars count={review.rating} />
-                    <blockquote className="mt-4 flex-1 font-serif text-[19px] leading-[1.45] text-ink sm:text-[20px]">
-                      &ldquo;{review.quote}&rdquo;
-                    </blockquote>
-                    <figcaption className="mt-5 text-[11px] uppercase tracking-eyebrow text-muted">
-                      — {review.author}
-                      {review.verified && !isPlaceholder && (
-                        <span className="ml-2 inline-flex items-center gap-1 text-pink">
-                          <ShieldIcon className="h-3 w-3" />
-                          Verified
-                        </span>
-                      )}
-                    </figcaption>
-                  </figure>
-                </Reveal>
-              ))}
-            </ul>
+            <ReviewList items={items} isPlaceholder={isPlaceholder} />
           </>
         ) : (
           <Reveal className="mx-auto mt-8 max-w-[34rem] text-center">
