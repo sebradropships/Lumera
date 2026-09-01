@@ -74,10 +74,10 @@ export const ritualVideo: ProductVideo | null = {
 /** Hero gallery, in slide order. Empty → the store's photography, then the SVG panels. */
 export const gallery: ProductImage[] = [
   {
-    src: "/hero-1-flatlay.jpg",
+    src: "/hero-1-flatlay-full.jpg",
     alt: "Two Hoygi mask sachets arranged on a pale grey surface beside a mirror",
     width: 1086,
-    height: 1086,
+    height: 1448,
   },
   {
     src: "/hero-2-packshot.jpg",
@@ -92,10 +92,10 @@ export const gallery: ProductImage[] = [
     height: 1200,
   },
   {
-    src: "/hero-4-ingredients-2.jpg",
+    src: "/hero-4-ingredients-full.jpg",
     alt: "Ingredient panel: hydrolyzed collagen for elasticity, glycyrrhiza glabra root extract to soothe, hyaluronic acid to hydrate, camellia sinensis leaf extract for antioxidants, and panthenol to strengthen the skin barrier",
     width: 1402,
-    height: 1402,
+    height: 1122,
   },
 ];
 

@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ProductArt from "@/components/ProductArt";
-import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
+import { photoClassName } from "@/components/PhotoFrame";
 import { gallery as localGallery, type ProductImage } from "@/data/media";
 import { useCart } from "@/lib/cart";
 import { imageSlots } from "@/lib/image-slots";
@@ -71,12 +71,13 @@ export default function ProductGallery() {
         {slides.map((slide, i) => (
           <div
             key={slide.key}
-            // Square frame end to end: the store's photography is 1600x1600,
-            // and a 4:5 frame would have cover-cropped a fifth of every shot
-            // off the top and bottom. Matching the source means no crop at all
-            // on desktop. Mobile still caps the height to keep the price above
-            // the fold, which costs a small symmetric crop.
-            className="relative aspect-square max-h-[33svh] w-full shrink-0 snap-center overflow-hidden rounded-xl3 bg-petal sm:max-h-none"
+            // The frame bounds the image; it does not reshape it. Sizing the
+            // photo as a replaced element with max-h/max-w and auto dimensions
+            // makes it settle at its own aspect ratio inside those bounds, so a
+            // 3:4 shot and a 5:4 panel both arrive whole. Cover-cropping to a
+            // fixed square previously cut a fifth off the tall ones and two of
+            // five ingredient cards off the wide one.
+            className="relative flex aspect-square max-h-[33svh] w-full shrink-0 snap-center items-center justify-center sm:max-h-none"
             aria-label={`Image ${i + 1} of ${slides.length}`}
             role="group"
           >
@@ -84,18 +85,23 @@ export default function ProductGallery() {
               <Image
                 src={slide.image.src}
                 alt={slide.image.alt}
-                fill
+                width={slide.image.width ?? 1600}
+                height={slide.image.height ?? 1600}
                 sizes="(min-width: 1024px) 560px, (min-width: 640px) 90vw, 100vw"
                 quality={92}
                 priority={i === 0}
                 fetchPriority={i === 0 ? "high" : undefined}
                 loading={i === 0 ? "eager" : "lazy"}
-                className={photoClassName("object-cover")}
+                // The hairline replaces PhotoFrame here: a vignette overlay
+                // would have covered the whole bounding box, haloing the empty
+                // space beside an image that no longer fills it.
+                className={photoClassName(
+                  "h-auto max-h-full w-auto max-w-full rounded-xl3 object-contain shadow-soft ring-1 ring-inset ring-white/55",
+                )}
               />
             ) : (
-              <ProductArt variant={slide.art} className="h-full w-full" />
+              <ProductArt variant={slide.art} className="h-full w-full rounded-xl3" />
             )}
-            {slide.image && <PhotoFrame />}
           </div>
         ))}
       </div>
