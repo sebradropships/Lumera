@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import Experience from "@/components/Experience";
 import SocialProof from "@/components/SocialProof";
 import StickyBar from "@/components/StickyBar";
+import Wordmark from "@/components/Wordmark";
 import { savingsPercent } from "@/data/product";
 import { defaultVariantOf, getProduct } from "@/lib/product-source";
 
@@ -29,7 +30,7 @@ export default async function Page() {
 
       <footer className="border-t border-rosedust/50 px-5 pb-28 pt-8 text-center sm:pb-12 lg:pb-12">
         <p className="font-serif text-[13px] uppercase tracking-brand text-ink">
-          <span className="pl-[0.42em]">HOYGI</span>
+          <Wordmark className="inline-block h-9 w-auto" />
         </p>
         <p className="mx-auto mt-3 max-w-[42ch] text-[11px] leading-relaxed text-muted">
           Hoygi is a cosmetic skincare product, not a medical treatment. Results and appearance

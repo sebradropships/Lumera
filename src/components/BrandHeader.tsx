@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useCart } from "@/lib/cart";
 import { BagIcon } from "@/components/Icons";
+import Wordmark from "@/components/Wordmark";
 
 export default function BrandHeader() {
   const { itemCount, openCart } = useCart();
@@ -31,7 +32,7 @@ export default function BrandHeader() {
           className="flex h-10 items-center font-serif text-[15px] font-medium uppercase tracking-brand text-ink sm:text-[17px]"
           aria-label="Hoygi — back to top"
         >
-          <span className="pl-[0.42em]">HOYGI</span>
+          <Wordmark className="h-7 w-auto sm:h-8" alt="" priority />
         </a>
 
         <button
