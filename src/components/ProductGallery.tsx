@@ -6,6 +6,7 @@ import ProductArt from "@/components/ProductArt";
 import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import type { ProductImage } from "@/data/media";
 import { useCart } from "@/lib/cart";
+import { imageSlots } from "@/lib/image-slots";
 
 type Slide = {
   key: string;
@@ -24,13 +25,12 @@ export default function ProductGallery() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
 
-  const slides: Slide[] = useMemo(
-    () =>
-      product.images.length > 0
-        ? product.images.map((image, i) => ({ key: `image-${i}`, image }))
-        : fallbackSlides,
-    [product.images],
-  );
+  const slides: Slide[] = useMemo(() => {
+    const hero = imageSlots(product.images).gallery;
+    return hero.length > 0
+      ? hero.map((image, i) => ({ key: `image-${i}`, image }))
+      : fallbackSlides;
+  }, [product.images]);
 
   const onScroll = useCallback(() => {
     const track = trackRef.current;

@@ -4,6 +4,7 @@ import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import Reveal from "@/components/Reveal";
 import { DiamondIcon } from "@/components/Icons";
 import { benefitImages, ritualImage, type ProductImage } from "@/data/media";
+import { imageSlots } from "@/lib/image-slots";
 import type { ResolvedProduct } from "@/lib/product-source";
 
 const cards = [
@@ -49,18 +50,11 @@ const steps = [
  * image already filling the top of the page, and wraps so a store with only
  * one or two photos still fills every slot.
  */
-function pickPhoto(
-  overrides: ProductImage[],
-  index: number,
-  photos: ProductImage[],
-  offset = 1,
-): ProductImage | null {
-  return overrides[index] ?? photos[(index + offset) % photos.length] ?? null;
-}
 
 export default function Experience({ product }: { product: ResolvedProduct }) {
   const photos = product.images;
-  const ritual = ritualImage ?? (photos.length > 0 ? photos[photos.length > 4 ? 4 : 0] : null);
+  const slots = imageSlots(photos);
+  const ritual = ritualImage ?? slots.ritual;
 
   return (
     <section
@@ -84,7 +78,7 @@ export default function Experience({ product }: { product: ResolvedProduct }) {
         {/* Benefit cards */}
         <ul className="mt-11 grid gap-4 sm:grid-cols-3 sm:gap-5 lg:mt-14 lg:gap-7">
           {cards.map((card, i) => {
-            const image = pickPhoto(benefitImages, i, photos);
+            const image = benefitImages[i] ?? slots.benefits[i];
             return (
               <Reveal as="li" key={card.number} delay={i * 90} className="h-full">
                 <article className="group h-full overflow-hidden rounded-xl2 border border-white/70 bg-white/65 shadow-soft backdrop-blur-[2px] transition-all duration-500 ease-silk hover:-translate-y-1 hover:shadow-lift">
