@@ -56,16 +56,22 @@ export const product = {
    * Add more entries (3-pack, 5-pack) and the selector appears automatically —
    * but only if those variants genuinely exist in the store, or checkout will
    * reject them.
+   *
+   * THE VARIANT IDS BELOW MUST MATCH LIVE VARIANTS. They are only used when the
+   * Admin API is unreachable, which is exactly when nobody is watching, and a
+   * checkout permalink built from a deleted variant fails at Shopify rather
+   * than here. Relisting the product — a new supplier, a re-import — mints new
+   * ids and strands these, so re-check them whenever the product is replaced.
    */
   variants: [
     {
-      id: "47728384606379",
+      id: "47734541877419",
       title: "Bio-Collagen Gel Mask",
       note: "One glow ritual",
       price: 3900,
       compareAtPrice: 6500,
-      shopifyVariantId: "47728384606379",
-      shopifyVariantGid: "gid://shopify/ProductVariant/47728384606379",
+      shopifyVariantId: "47734541877419",
+      shopifyVariantGid: "gid://shopify/ProductVariant/47734541877419",
       default: true,
     },
   ] as ProductVariant[],

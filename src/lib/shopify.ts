@@ -42,7 +42,9 @@ export function cartPermalink(lines: CheckoutLine[], domain: string): string | n
   return `https://${domain}/cart/${parts.join(",")}`;
 }
 
-const API_VERSION = process.env.SHOPIFY_API_VERSION?.trim() || "2025-01";
+// Kept in step with the Admin client. A hard-coded version silently ages out
+// of support, and this one had already fallen a year behind it.
+const API_VERSION = process.env.SHOPIFY_API_VERSION?.trim() || "2026-01";
 
 const CART_CREATE = /* GraphQL */ `
   mutation CartCreate($lines: [CartLineInput!]!) {
