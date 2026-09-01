@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
 import { getProduct, defaultVariantOf } from "@/lib/product-source";
+import { siteUrl } from "@/lib/site";
 import "./globals.css";
 
 /**
@@ -17,7 +18,6 @@ const sans = Outfit({
   display: "swap",
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://hoygi.com";
 const description =
   "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 20-minute glow ritual.";
 
