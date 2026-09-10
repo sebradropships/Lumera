@@ -5,6 +5,7 @@ import CartDrawer from "@/components/CartDrawer";
 import MetaPixel from "@/components/MetaPixel";
 import { getProduct, defaultVariantOf } from "@/lib/product-source";
 import { siteUrl } from "@/lib/site";
+import { contentPayload } from "@/lib/pixel";
 import "./globals.css";
 
 /**
@@ -96,7 +97,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
         />
-        <MetaPixel />
+        <MetaPixel
+          viewContent={contentPayload([{ variant, quantity: 1 }], product.currency, product.title)}
+        />
       </body>
     </html>
   );

@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import type { ProductVariant } from "@/data/product";
 import type { ResolvedProduct } from "@/lib/product-source";
+import { contentPayload, track } from "@/lib/pixel";
 import { cartPermalink } from "@/lib/shopify";
 
 export type CartLine = {
@@ -108,20 +102,29 @@ export function CartProvider({
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const addToCart = useCallback((variantId: string, quantity: number) => {
-    setCheckoutError(null);
-    setLines((current) => {
-      const existing = current.find((l) => l.variantId === variantId);
-      if (existing) {
-        return current.map((l) =>
-          l.variantId === variantId
-            ? { ...l, quantity: Math.min(99, l.quantity + quantity) }
-            : l,
-        );
-      }
-      return [...current, { variantId, quantity: Math.min(99, Math.max(1, quantity)) }];
-    });
-  }, []);
+  const addToCart = useCallback(
+    (variantId: string, quantity: number) => {
+      setCheckoutError(null);
+      // Reports the line just added, not the resulting basket: AddToCart is
+      // about this action, and Meta reconciles totals from InitiateCheckout on.
+      const variant = variantById(variantId);
+      const added = Math.min(99, Math.max(1, quantity));
+      track(
+        "AddToCart",
+        contentPayload([{ variant, quantity: added }], product.currency, product.title),
+      );
+      setLines((current) => {
+        const existing = current.find((l) => l.variantId === variantId);
+        if (existing) {
+          return current.map((l) =>
+            l.variantId === variantId ? { ...l, quantity: Math.min(99, l.quantity + added) } : l,
+          );
+        }
+        return [...current, { variantId, quantity: added }];
+      });
+    },
+    [variantById, product.currency, product.title],
+  );
 
   const setLineQuantity = useCallback((variantId: string, quantity: number) => {
     setLines((current) =>
@@ -151,43 +154,56 @@ export function CartProvider({
   }, [lines, variantById]);
 
   /** Resolves a Shopify checkout URL for the given lines, or null. */
-  const resolveCheckoutUrl = useCallback(async (target: CartLine[]) => {
-    const payload = target.map((line) => {
-      const variant = variantById(line.variantId);
-      return {
-        variantId: variant.shopifyVariantId,
-        variantGid: variant.shopifyVariantGid,
-        quantity: line.quantity,
-      };
-    });
+  const resolveCheckoutUrl = useCallback(
+    async (target: CartLine[]) => {
+      const payload = target.map((line) => {
+        const variant = variantById(line.variantId);
+        return {
+          variantId: variant.shopifyVariantId,
+          variantGid: variant.shopifyVariantGid,
+          quantity: line.quantity,
+        };
+      });
 
-    // 1. Storefront API cart. Skipped entirely without a Storefront token —
-    // calling it anyway just adds latency to every checkout for a known no.
-    if (product.storefrontConfigured) {
-      try {
-        const res = await fetch("/api/checkout", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ lines: payload }),
-        });
-        if (res.ok) {
-          const data = (await res.json()) as { checkoutUrl?: string };
-          if (data.checkoutUrl) return data.checkoutUrl;
+      // 1. Storefront API cart. Skipped entirely without a Storefront token —
+      // calling it anyway just adds latency to every checkout for a known no.
+      if (product.storefrontConfigured) {
+        try {
+          const res = await fetch("/api/checkout", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ lines: payload }),
+          });
+          if (res.ok) {
+            const data = (await res.json()) as { checkoutUrl?: string };
+            if (data.checkoutUrl) return data.checkoutUrl;
+          }
+        } catch {
+          /* fall through to the permalink */
         }
-      } catch {
-        /* fall through to the permalink */
       }
-    }
 
-    // 2. Cart permalink.
-    return cartPermalink(payload, product.shopifyDomain);
-  }, [variantById, product.shopifyDomain, product.storefrontConfigured]);
+      // 2. Cart permalink.
+      return cartPermalink(payload, product.shopifyDomain);
+    },
+    [variantById, product.shopifyDomain, product.storefrontConfigured],
+  );
 
   const startCheckout = useCallback(
     async (target: CartLine[]) => {
       if (target.length === 0) return;
       setIsCheckingOut(true);
       setCheckoutError(null);
+      // Fired before the redirect, not after: navigation to Shopify tears this
+      // page down, and a request still in flight then would be lost.
+      track(
+        "InitiateCheckout",
+        contentPayload(
+          target.map((l) => ({ variant: variantById(l.variantId), quantity: l.quantity })),
+          product.currency,
+          product.title,
+        ),
+      );
       try {
         const url = await resolveCheckoutUrl(target);
         if (url) {
@@ -204,7 +220,7 @@ export function CartProvider({
         setIsCheckingOut(false);
       }
     },
-    [resolveCheckoutUrl, product.shopifyDomain],
+    [resolveCheckoutUrl, product.shopifyDomain, product.currency, product.title, variantById],
   );
 
   const checkout = useCallback(() => startCheckout(lines), [lines, startCheckout]);

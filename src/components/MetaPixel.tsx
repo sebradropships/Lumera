@@ -17,7 +17,19 @@ export const META_PIXEL_ID = "1077952204953438";
  * parses its contents), so JSX children there can produce a mismatch warning
  * while a raw HTML string cannot.
  */
-export default function MetaPixel() {
+export default function MetaPixel({
+  viewContent,
+}: {
+  /** Fired alongside PageView. This is a single-product site, so the landing
+   *  page IS the product page and there is no later moment to attribute it to. */
+  viewContent?: Record<string, unknown>;
+}) {
+  // Serialised into an inline script, so the string must not be able to close
+  // the tag. JSON.stringify handles quoting; escaping "<" covers "</script>".
+  const viewContentCall = viewContent
+    ? `\nfbq('track', 'ViewContent', ${JSON.stringify(viewContent).replace(/</g, "\\u003c")});`
+    : "";
+
   return (
     <>
       <Script id="meta-pixel" strategy="afterInteractive">
@@ -30,7 +42,7 @@ t.src=v;s=b.getElementsByTagName(e)[0];
 s.parentNode.insertBefore(t,s)}(window, document,'script',
 'https://connect.facebook.net/en_US/fbevents.js');
 fbq('init', '${META_PIXEL_ID}');
-fbq('track', 'PageView');`}
+fbq('track', 'PageView');${viewContentCall}`}
       </Script>
 
       <noscript
