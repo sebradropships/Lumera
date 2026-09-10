@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { CartProvider } from "@/lib/cart";
 import CartDrawer from "@/components/CartDrawer";
+import MetaPixel from "@/components/MetaPixel";
 import { getProduct, defaultVariantOf } from "@/lib/product-source";
 import { siteUrl } from "@/lib/site";
 import "./globals.css";
@@ -95,6 +96,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
         />
+        <MetaPixel />
       </body>
     </html>
   );
