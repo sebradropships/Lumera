@@ -71,19 +71,22 @@ export const ritualVideo: ProductVideo | null = {
   height: 1280,
 };
 
-/** Hero gallery, in slide order. Empty → the store's photography, then the SVG panels. */
+/** Hero gallery. THIS ARRAY sets slide order — the numbers in the
+ * filenames are historical and no longer track position.
+ *
+ * In slide order. Empty → the store's photography, then the SVG panels. */
 export const gallery: ProductImage[] = [
-  {
-    src: "/hero-1-flatlay-sq.jpg",
-    alt: "Two Hoygi mask sachets arranged on a pale grey surface beside a mirror",
-    width: 1448,
-    height: 1448,
-  },
   {
     src: "/hero-2-packshot.jpg",
     alt: "The Hoygi sachet next to the unfolded white mask sheet",
     width: 1600,
     height: 1600,
+  },
+  {
+    src: "/hero-1-flatlay-sq.jpg",
+    alt: "Two Hoygi mask sachets arranged on a pale grey surface beside a mirror",
+    width: 1448,
+    height: 1448,
   },
   {
     src: "/hero-3-sheet.jpg",
