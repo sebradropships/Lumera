@@ -87,7 +87,18 @@ export const product = {
     urgency: "Limited offer · ends soon",
     ctaPrimary: "GET MY HOYGI MASK",
     ctaFinal: "GET HOYGI NOW",
-    microcopy: "Secure checkout · Fast US delivery",
+    microcopy: "Free shipping · Secure checkout",
+    /**
+     * Shipping promise, written once and read everywhere it appears — the
+     * strip, the purchase panel, the cart and the closing offer.
+     *
+     * It must match the store's own rates. Shopify currently bills $6.50 on
+     * the Economy method unless the order clears $60, so this line is only
+     * true once that rate is $0 with no minimum. If the paid rate ever comes
+     * back, change this string in the same breath.
+     */
+    shipping: "Free shipping",
+    shippingCaps: "FREE SHIPPING",
   },
 } as const;
 
@@ -96,9 +107,7 @@ export const defaultVariant: ProductVariant =
 
 export function formatPrice(cents: number): string {
   const dollars = cents / 100;
-  return Number.isInteger(dollars)
-    ? `$${dollars.toFixed(0)}`
-    : `$${dollars.toFixed(2)}`;
+  return Number.isInteger(dollars) ? `$${dollars.toFixed(0)}` : `$${dollars.toFixed(2)}`;
 }
 
 export function savingsPercent(v: ProductVariant): number | null {

@@ -210,9 +210,12 @@ export default function CartDrawer() {
               </span>
             </div>
 
-            <p className="mt-1.5 text-[11px] text-muted">
-              Shipping and taxes calculated at checkout.
-            </p>
+            <div className="mt-2 flex items-center justify-between text-[12px]">
+              <span className="text-muted">Shipping</span>
+              <span className="font-medium uppercase tracking-wide text-pink">Free</span>
+            </div>
+
+            <p className="mt-1.5 text-[11px] text-muted">Taxes calculated at checkout.</p>
 
             {checkoutError && (
               <p
@@ -235,7 +238,7 @@ export default function CartDrawer() {
 
             <p className="mt-3 flex items-center justify-center gap-1.5 text-[11px] text-muted">
               <ShieldIcon className="h-3.5 w-3.5 text-pink" />
-              Secure checkout · Fast US delivery
+              Free shipping · Secure checkout
             </p>
           </div>
         )}

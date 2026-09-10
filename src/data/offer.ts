@@ -34,7 +34,7 @@ export const offer = {
      * The repeating sequence. Rendered twice so the loop has no visible seam,
      * so keep it short; every item is separated by a diamond.
      */
-    items: ["SALE", "SALE", "SALE"] as string[],
+    items: ["SALE", "FREE SHIPPING", "SALE"] as string[],
 
     /**
      * Appended to the sequence with {n} replaced by the real saving. Dropped

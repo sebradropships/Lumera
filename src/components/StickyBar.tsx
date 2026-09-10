@@ -78,6 +78,10 @@ export default function StickyBar() {
                   </span>
                 </>
               )}
+              <span aria-hidden="true">·</span>
+              <span className="whitespace-nowrap font-medium uppercase tracking-wide text-pink">
+                Free shipping
+              </span>
             </p>
           </div>
 

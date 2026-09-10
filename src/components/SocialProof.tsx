@@ -52,7 +52,7 @@ export default function SocialProof({ product }: { product: ResolvedProduct }) {
 
             <p className="mt-4 flex items-center justify-center gap-2 text-[11px] text-muted">
               <DiamondIcon className="h-2 w-2 text-pink" />
-              Limited offer · Secure checkout
+              Free shipping · Limited offer · Secure checkout
             </p>
           </div>
         </Reveal>

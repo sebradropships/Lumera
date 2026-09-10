@@ -122,7 +122,9 @@ export default function PurchasePanel() {
                       {option.title}
                     </span>
                     {option.note && (
-                      <span className="mt-0.5 text-[11px] leading-tight text-muted">{option.note}</span>
+                      <span className="mt-0.5 text-[11px] leading-tight text-muted">
+                        {option.note}
+                      </span>
                     )}
                     <span className="mt-1.5 flex items-baseline gap-1.5">
                       <span className="text-[15px] font-medium text-ink">
@@ -174,7 +176,7 @@ export default function PurchasePanel() {
           </span>
           <span className="inline-flex items-center gap-1.5">
             <TruckIcon className="h-3.5 w-3.5 text-pink" />
-            Fast US delivery
+            {product.offer.shipping}
           </span>
         </p>
 
@@ -187,9 +189,7 @@ export default function PurchasePanel() {
       {/* Trust strip */}
       <div className="mt-6 flex items-center justify-center gap-2.5">
         <Stars />
-        <span className="text-[11.5px] tracking-wide text-plum">
-          Loved by skincare lovers
-        </span>
+        <span className="text-[11.5px] tracking-wide text-plum">Loved by skincare lovers</span>
       </div>
     </div>
   );
