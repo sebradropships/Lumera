@@ -21,7 +21,7 @@ const sans = Outfit({
 });
 
 const description =
-  "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 40-minute glow ritual.";
+  "A bio-collagen gel mask designed to deeply hydrate and leave skin looking smoother, fresher and visibly radiant. A 40-minute glow ritual, with free shipping.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -83,6 +83,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       price: (variant.price / 100).toFixed(2),
       availability: "https://schema.org/InStock",
       url: siteUrl,
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingRate: { "@type": "MonetaryAmount", value: "0", currency: product.currency },
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "US",
+        },
+      },
     },
   };
 

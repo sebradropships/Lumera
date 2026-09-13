@@ -6,6 +6,7 @@ import Reviews from "@/components/Reviews";
 import SocialProof from "@/components/SocialProof";
 import StickyBar from "@/components/StickyBar";
 import Wordmark from "@/components/Wordmark";
+import { TruckIcon } from "@/components/Icons";
 import { savingsPercent } from "@/data/product";
 import { defaultVariantOf, getProduct } from "@/lib/product-source";
 
@@ -36,7 +37,12 @@ export default async function Page() {
         <p className="font-serif text-[13px] uppercase tracking-brand text-ink">
           <Wordmark id="mark-footer" className="inline-block h-10 w-auto" />
         </p>
-        <p className="mx-auto mt-3 max-w-[42ch] text-[11px] leading-relaxed text-muted">
+        <p className="mx-auto mt-4 inline-flex items-center gap-1.5 rounded-full border border-rosedust/60 bg-white/60 px-4 py-1.5 text-[11px] font-medium uppercase tracking-eyebrow text-pink">
+          <TruckIcon className="h-3.5 w-3.5" />
+          Free shipping on every order
+        </p>
+
+        <p className="mx-auto mt-4 max-w-[42ch] text-[11px] leading-relaxed text-muted">
           Hoygi is a cosmetic skincare product, not a medical treatment. Results and appearance vary
           from person to person.
         </p>
