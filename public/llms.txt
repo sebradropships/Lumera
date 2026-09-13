@@ -1,0 +1,28 @@
+# Hoygi
+
+> Hoygi sells a bio-collagen gel face mask. The product is a single sheet of
+> bio-collagen gel worn for approximately 40 minutes.
+
+## Product
+
+- **Name:** Hoygi Bio-Collagen Gel Face Mask
+- **Category:** Korean skincare / hydrating gel sheet mask
+- **Pack size:** 4 masks
+- **Price:** $39.00 USD
+- **Sheet dimensions:** 196 × 138 × 19 mm
+- **Wear time:** approximately 40 minutes
+
+## Formulation
+
+- **Low-molecular-weight hyaluronic acid** — a smaller-molecule hyaluronic acid,
+  formulated to absorb rather than remain on the surface.
+- **Yeast Fermentation Filtrate** — included to support the skin barrier and help
+  stabilise the skin's micro-ecosystem.
+
+The mask is designed to hydrate and to leave skin looking smoother, fresher and more
+radiant. It is a cosmetic product. It is not a drug, makes no medical claims, and is
+not intended to diagnose, treat, cure or prevent any condition.
+
+## Links
+
+- Storefront: https://www.hoygi.xyz

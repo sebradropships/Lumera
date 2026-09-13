@@ -14,4 +14,9 @@
  * page is statically prerendered, so this is read at BUILD time — changing the
  * variable in Vercel requires a redeploy, not just a restart.
  */
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://hoygi.xyz";
+/**
+ * The `www` host, not the apex. `hoygi.xyz` answers 308 and redirects here, so an
+ * apex canonical names a URL that does not serve the page — pointing the canonical
+ * at a redirect rather than at the document it describes.
+ */
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://www.hoygi.xyz";
