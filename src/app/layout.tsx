@@ -64,6 +64,11 @@ export const viewport: Viewport = {
   maximumScale: 5,
 };
 
+/** Structured data needs absolute URLs; local assets are stored repo-relative. */
+function absoluteUrl(src: string): string {
+  return src.startsWith("http") ? src : `${siteUrl}${src}`;
+}
+
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const product = await getProduct();
   const variant = defaultVariantOf(product);
@@ -76,14 +81,31 @@ export default async function RootLayout({ children }: { children: React.ReactNo
     brand: { "@type": "Brand", name: "Hoygi" },
     description,
     category: "Beauty & Personal Care > Skin Care > Face Masks",
-    ...(product.images[0] ? { image: product.images[0].src } : {}),
+    /* Absolute: the fallback images are repo-relative ("/hero-2-packshot.jpg"), and a
+       relative src in structured data is one a crawler cannot resolve. Shopify's own
+       URLs already start with https and pass through untouched. */
+    ...(product.images[0] ? { image: absoluteUrl(product.images[0].src) } : {}),
+    ...(variant.shopifyVariantId ? { sku: variant.shopifyVariantId } : {}),
     offers: {
       "@type": "Offer",
       priceCurrency: product.currency,
       price: (variant.price / 100).toFixed(2),
       availability: "https://schema.org/InStock",
+      itemCondition: "https://schema.org/NewCondition",
       url: siteUrl,
+      seller: { "@type": "Organization", name: "Hoygi" },
     },
+  };
+
+  /* No aggregateRating: the reviews on the page are not verified purchases, and
+     rating markup without genuine reviews behind it is a manual action waiting to
+     happen. Add it when there are real ones to count. */
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Hoygi",
+    url: siteUrl,
+    logo: `${siteUrl}/logo-hoygi.png`,
   };
 
   return (
@@ -96,6 +118,10 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
         <MetaPixel
           viewContent={contentPayload([{ variant, quantity: 1 }], product.currency, product.title)}
