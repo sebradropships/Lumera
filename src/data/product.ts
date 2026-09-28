@@ -49,9 +49,10 @@ export const product = {
    * purchasable even if the Shopify call fails. Shopify overrides these when
    * it answers.
    *
-   * These mirror the store: $39.00 against a $65.00 compare-at price, which is
-   * exactly 40% off. Change the price in Shopify, not here — this is only the
-   * fallback for when the Admin API cannot be reached.
+   * These mirror the store: $19.00 against a $65.00 compare-at price, which is
+   * 71% off — the 4-pack works out at $4.75 a mask. Change the price in
+   * Shopify, not here — this is only the fallback for when the Admin API
+   * cannot be reached.
    *
    * Add more entries (3-pack, 5-pack) and the selector appears automatically —
    * but only if those variants genuinely exist in the store, or checkout will
@@ -68,7 +69,7 @@ export const product = {
       id: "47734541877419",
       title: "Bio-Collagen Gel Mask",
       note: "One glow ritual",
-      price: 3900,
+      price: 1900,
       compareAtPrice: 6500,
       shopifyVariantId: "47734541877419",
       shopifyVariantGid: "gid://shopify/ProductVariant/47734541877419",
