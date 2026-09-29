@@ -49,10 +49,12 @@ export const product = {
    * purchasable even if the Shopify call fails. Shopify overrides these when
    * it answers.
    *
-   * These mirror the store: $19.00 against a $65.00 compare-at price, which is
-   * 71% off — the 4-pack works out at $4.75 a mask. Change the price in
-   * Shopify, not here — this is only the fallback for when the Admin API
-   * cannot be reached.
+   * These mirror the store: $19.00 against a $45.00 compare-at price, which is
+   * 58% off — the 4-pack works out at $4.75 a mask. Both figures mirror the
+   * Shopify admin as of 2026-09-29. Change the price in Shopify and here in
+   * the same breath — this is only the fallback for when the Admin API cannot
+   * be reached, and a fallback that disagrees with checkout is worse than
+   * none.
    *
    * Add more entries (3-pack, 5-pack) and the selector appears automatically —
    * but only if those variants genuinely exist in the store, or checkout will
@@ -70,7 +72,7 @@ export const product = {
       title: "Bio-Collagen Gel Mask",
       note: "One glow ritual",
       price: 1900,
-      compareAtPrice: 6500,
+      compareAtPrice: 4500,
       shopifyVariantId: "47734541877419",
       shopifyVariantGid: "gid://shopify/ProductVariant/47734541877419",
       default: true,
@@ -93,10 +95,14 @@ export const product = {
      * Shipping promise, written once and read everywhere it appears — the
      * strip, the purchase panel, the cart and the closing offer.
      *
-     * It must match the store's own rates. Shopify currently bills $6.50 on
-     * the Economy method unless the order clears $60, so this line is only
-     * true once that rate is $0 with no minimum. If the paid rate ever comes
-     * back, change this string in the same breath.
+     * Unconditional, and true as written: the customer pays $0 for shipping on
+     * every order, with no minimum spend and no order threshold. Hoygi settles
+     * the freight with CJ Dropshipping directly rather than billing it at
+     * checkout, so there is no rate for this promise to contradict.
+     *
+     * It must still match the store's own rates. If a paid rate is ever
+     * reintroduced in Shopify, change this string in the same breath — the
+     * strip, the panel, the cart and the closing offer all read from here.
      */
     shipping: "Free shipping",
     shippingCaps: "FREE SHIPPING",
