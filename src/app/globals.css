@@ -175,6 +175,55 @@
     }
   }
 
+  /*
+   * Savings burst. One keyframe serves all fifteen hearts: each carries its own
+   * vector, rotation, scale and duration as custom properties, so the stagger
+   * comes from per-particle delay rather than fifteen separate animations.
+   *
+   * Only transform and opacity are touched, so the whole burst runs on the
+   * compositor and never lays out — which matters because this plays directly
+   * above the checkout button.
+   */
+  .savings-heart {
+    animation: savings-heart-burst var(--burst-duration, 1s)
+      cubic-bezier(0.22, 0.61, 0.36, 1) var(--burst-delay, 0s) both;
+    will-change: transform, opacity;
+  }
+
+  @keyframes savings-heart-burst {
+    0% {
+      opacity: 0;
+      transform: translate3d(-50%, -50%, 0) scale(0.3) rotate(0deg);
+    }
+    /* Pops to full size early, then coasts outward — a heart that grows all the
+       way to the edge reads as a zoom rather than a burst. */
+    18% {
+      opacity: 1;
+      transform: translate3d(
+          calc(-50% + (var(--burst-tx) * 0.28)),
+          calc(-50% + (var(--burst-ty) * 0.28)),
+          0
+        )
+        scale(var(--burst-scale, 1)) rotate(calc(var(--burst-rotate) * 0.3));
+    }
+    100% {
+      opacity: 0;
+      transform: translate3d(
+          calc(-50% + var(--burst-tx)),
+          calc(-50% + var(--burst-ty)),
+          0
+        )
+        scale(0.55) rotate(var(--burst-rotate));
+    }
+  }
+
+  /* A fifteen-particle burst is exactly the kind of motion this setting is for. */
+  @media (prefers-reduced-motion: reduce) {
+    .savings-heart {
+      display: none;
+    }
+  }
+
   /* Lining, uniform-width digits — oldstyle figures misread in a countdown. */
   .lining-nums {
     font-variant-numeric: lining-nums tabular-nums;

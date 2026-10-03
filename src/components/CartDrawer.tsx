@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import ProductArt from "@/components/ProductArt";
 import PhotoFrame, { photoClassName } from "@/components/PhotoFrame";
 import Image from "next/image";
 import QuantityStepper from "@/components/QuantityStepper";
+import SavingsBurst from "@/components/SavingsBurst";
 import { ArrowIcon, CloseIcon, ShieldIcon } from "@/components/Icons";
 import { formatPrice } from "@/data/product";
 import { useCart } from "@/lib/cart";
@@ -64,6 +65,16 @@ export default function CartDrawer() {
   }, [isOpen, closeCart]);
 
   const savedAmount = compareAtSubtotal - subtotal;
+
+  /* The burst celebrates the saving, so it fires when the drawer opens holding
+     one, and again whenever the amount changes under an already-open drawer —
+     a second mask in the bag is worth a second burst. Incrementing the key is
+     what remounts the particles and restarts the animation. */
+  const [burstKey, setBurstKey] = useState(0);
+  useEffect(() => {
+    if (!isOpen || savedAmount <= 0) return;
+    setBurstKey((previous) => previous + 1);
+  }, [isOpen, savedAmount]);
 
   return (
     <div
@@ -195,11 +206,17 @@ export default function CartDrawer() {
         </div>
 
         {lines.length > 0 && (
-          <div className="border-t border-rosedust/60 bg-white/60 px-5 pt-4 backdrop-blur-sm pb-safe">
+          /* relative + overflow-hidden: the footer is the burst's frame. Clipping
+             here keeps a particle heading right from widening the document, and
+             the hearts still have the full width of the drawer to travel. */
+          <div className="relative overflow-hidden border-t border-rosedust/60 bg-white/60 px-5 pt-4 backdrop-blur-sm pb-safe">
             {savedAmount > 0 && (
               <div className="mb-2.5 flex items-center justify-between text-[12px]">
                 <span className="text-muted">Limited offer savings</span>
-                <span className="font-medium text-pink">−{formatPrice(savedAmount)}</span>
+                <span className="relative inline-flex font-medium text-pink">
+                  −{formatPrice(savedAmount)}
+                  <SavingsBurst burstKey={burstKey} />
+                </span>
               </div>
             )}
 
